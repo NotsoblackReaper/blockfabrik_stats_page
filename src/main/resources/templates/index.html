@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blockfabrik Stats Page</title>
+      <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
+      <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
+    <style>
+.content {
+  max-width: 1000px;
+  margin: auto;
+}
+    </style>
+  </head>
+  <body class="content" style="background-color:rgb(43, 43, 43);padding: 5px;">
+    <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;">
+    <div style="margin-bottom: 20px; margin-top: 10px;">
+        <div class="html-embed-5 w-embed w-script">     
+            <div id="rectangle" style="height:40px; width:300px; background: transparent; position:relative; align-items: center;">
+            <div id="gradient_bar" style="margin-top: 0; height: 40px; position: absolute;
+            background: linear-gradient(0.25turn, rgb(0, 224, 0) 210px, rgb(255, 145, 0) 280px, rgb(255, 20, 0) 100%); 
+            width: 100%;border-radius: 10px;border:3px solid black;"> 
+            </div>
+                <div id="arrow_bar" style="margin-top: 0; height: 40px; position: absolute; background: url(&quot;https://uploads-ssl.webflow.com/5e1076cb4b55b0338730e1d6/5f2bc8efd62f143a6f8ab1ee_arrow.png&quot;) right center / 30px 30px no-repeat rgba(0, 0, 0, 0); width: 39.625%;">
+                </div>
+        </div>
+    </div>
+  </div>
+  <hr>
+  <div id="visitorcount-container" class="freepercent1 ">						
+    <div class="actcounter zoom">
+        <div class="actcounter-title">
+            <span>Besucher</span>
+        </div>
+        <div class="actcounter-content">
+            <span id="visitors">-1</span>
+        </div>
+    </div>
+    <div class="freecounter zoom">
+        <div class="freecounter-title">
+            <span>Frei</span>
+        </div>
+        <div class="freecounter-content">
+            <span id="free">-1</span>
+        </div>
+    </div>						
+</div>
+       <script th:src="@{/js/get_count.js}"></script>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+#visitorcount-container {
+    width: 300px;
+}
+#visitorcount-container .freecounter,
+#visitorcount-container .actcounter {
+    font-family: 'Asap', sans-serif;
+    font-size: 20px;
+    color: rgba(0,0,0,0.7);
+    text-align: center;
+
+    padding: 5px;
+    border-radius: 20px;
+}
+
+#visitorcount-container .freecounter {
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+#visitorcount-container .freecounter.zoom,
+#visitorcount-container .actcounter.zoom {
+    background-color: rgb(235, 231, 231);
+    display: inline-block;
+    width: 132px;
+    border:3px solid black;
+}
+
+#visitorcount-container .freecounter {
+    margin: 5px 0 0 0;
+}
+
+#visitorcount-container .actcounter-content,
+#visitorcount-container .freecounter-content {
+    display: inline-block;
+}
