@@ -8,6 +8,13 @@
     </style>
 </head>
 <body>
-
+<div th:fragment="header">
+    <ul id="menu-bar">
+        <li><a id="home" th:href="@{/}">Home</a></li>
+        <li><a id="data" th:href="@{/data/list}">Data</a></li>
+        <li style="float:right"><a th:href="@{https://www.blockfabrik.at}">Blockfabrik</a></li>
+    </ul>
+    <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;margin-top:10px">
+</div>
 </body>
 </html>

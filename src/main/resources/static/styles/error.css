@@ -1,0 +1,14 @@
+.error-msg{
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgb(235, 231, 231);
+    border:3px solid black;
+    border-radius: 15px;
+    width: 40%;
+
+    font-family: 'Asap', sans-serif;
+    color: rgba(0,0,0,0.7);
+    text-align: center;
+    padding-bottom: 10px;
+}

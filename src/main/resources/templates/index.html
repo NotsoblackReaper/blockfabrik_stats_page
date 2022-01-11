@@ -13,12 +13,12 @@
     </style>
   </head>
   <body class="content" style="background-color:rgb(43, 43, 43);">
-  <ul id="menu-bar">
-      <li><a class="active" th:href="@{/}">Home</a></li>
-      <li><a th:href="@{/data/list}">Data</a></li>
-  </ul>
-    <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;">
-    <div style="margin-bottom: 20px; margin-top: 10px;">
+
+  <div th:replace="fragments/general.html :: header"></div>
+
+  <script>document.getElementById('home').classList.add('active');</script>
+
+  <div style="margin-bottom: 20px; margin-top: 10px;">
         <div class="html-embed-5 w-embed w-script">     
             <div id="rectangle" style="height:40px; width:300px; background: transparent; position:relative; align-items: center;">
             <div id="gradient_bar" style="margin-top: 0; height: 40px; position: absolute;

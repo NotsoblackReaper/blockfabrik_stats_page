@@ -13,11 +13,10 @@
     </style>
   </head>
   <body class="content" style="background-color:rgb(43, 43, 43);">
-  <ul id="menu-bar">
-    <li><a th:href="@{/}">Home</a></li>
-    <li><a class="active" th:href="@{/data/list}">Data</a></li>
-  </ul>
-    <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;">
+
+  <div th:replace="fragments/general.html :: header"></div>
+
+  <script>document.getElementById('data').classList.add('active');</script>
     <div>
       <table id="data-list">
         <thead>
@@ -28,9 +27,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${entryList.empty()}">
-          <td colspan="2"> No Entries Available </td>
-        </tr>
         <tr th:each="entry : ${entryList}">
           <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
           <td style="text-align: left;padding-left: 20px;"><span th:text="${entry.getDatapoint_date()}"> Date </span></td>
