@@ -1,0 +1,32 @@
+#menu-bar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    border-bottom-left-radius: 13px;
+    border-bottom-right-radius: 13px;
+}
+
+#menu-bar li{
+    float: left;
+}
+
+#menu-bar li a {
+    font-family: 'Asap', sans-serif;
+    font-size: 20px;
+    display: block;
+    color: white;
+    text-align: center;
+    width: 60px;
+    padding: 10px 16px;
+    text-decoration: none;
+}
+#menu-bar li a:hover {
+    background-color: #111;
+}
+
+.active {
+    background-color: #838585;
+    color: white;
+}

@@ -4,6 +4,7 @@
     <title>Blockfabrik Stats Page</title>
       <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
       <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
+      <link rel="stylesheet" th:href="@{/styles/menu-bar.css}"/>
     <style>
 .content {
   max-width: 1000px;
@@ -11,7 +12,11 @@
 }
     </style>
   </head>
-  <body class="content" style="background-color:rgb(43, 43, 43);padding: 5px;">
+  <body class="content" style="background-color:rgb(43, 43, 43);">
+  <ul id="menu-bar">
+      <li><a class="active" th:href="@{/}">Home</a></li>
+      <li><a th:href="@{/data/list}">Data</a></li>
+  </ul>
     <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;">
     <div style="margin-bottom: 20px; margin-top: 10px;">
         <div class="html-embed-5 w-embed w-script">     
@@ -26,7 +31,7 @@
     </div>
   </div>
   <hr>
-  <div id="visitorcount-container" class="freepercent1 ">						
+  <div id="visitorcount-container" class="freepercent1">
     <div class="actcounter zoom">
         <div class="actcounter-title">
             <span>Besucher</span>

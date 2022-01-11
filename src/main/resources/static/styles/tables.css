@@ -1,0 +1,20 @@
+#data-list{
+    width: 40%;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: rgb(235, 231, 231);
+    padding-bottom: 5px;
+    padding-top:3px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+span{
+    font-family: 'Asap', sans-serif;
+    font-size: 16px;
+}
+
+th{
+    font-family: 'Asap', sans-serif;
+    font-size: 18px;
+}

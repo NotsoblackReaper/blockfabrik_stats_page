@@ -5,15 +5,20 @@ import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.xml.crypto.Data;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
+import java.util.List;
 
 @Component
 public class DatabaseConnector {
 
-    @Autowired
-    DatapointRepository repository;
+    final DatapointRepository repository;
+
+    public DatabaseConnector(DatapointRepository repository) {
+        this.repository = repository;
+    }
 
     public void insertDatapoint(Date date, Time time, VisitorCount count){
         Datapoint data=new Datapoint();
@@ -30,5 +35,9 @@ public class DatabaseConnector {
         data.setDatapoint_max(count.getMaxcount());
 
         repository.save(data);
+    }
+
+    public List<Datapoint> getAllDesc(){
+        return repository.findAllDesc();
     }
 }
