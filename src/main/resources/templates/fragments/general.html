@@ -2,16 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" th:href="@{../styles/menu-bar.css}"/>
-    <style>
-
-    </style>
 </head>
 <body>
-<div th:fragment="header">
+<div th:fragment="styles">
+    <link rel="stylesheet" th:href="@{/styles/menu-bar.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/general.css}"/>
+</div>
+
+<div th:fragment="header(active)">
     <ul id="menu-bar">
-        <li><a id="home" th:href="@{/}">Home</a></li>
-        <li><a id="data" th:href="@{/data/list}">Data</a></li>
+        <li><a id="home" th:classappend="${active=='home'} ? active : inactive" th:href="@{/}">Home</a></li>
+        <li><a id="data" th:classappend="${active=='data'} ? active : inactive" th:href="@{/data/list}">Data</a></li>
+        <li><a id="charts" th:classappend="${active=='charts'} ? active : inactive" th:href="@{/data/charts}">Charts</a></li>
         <li style="float:right"><a th:href="@{https://www.blockfabrik.at}">Blockfabrik</a></li>
     </ul>
     <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;margin-top:10px">

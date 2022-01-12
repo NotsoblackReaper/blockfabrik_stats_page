@@ -2,17 +2,35 @@ package at.demski.blockfabrik_stats_page.service;
 
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.xml.crypto.Data;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class DatabaseConnector {
+
+    private static <T> Predicate<T> distinctByKeys(Function<? super T, ?>... keyExtractors)
+    {
+        final Map<List<?>, Boolean> seen = new ConcurrentHashMap<>();
+
+        return t ->
+        {
+            final List<?> keys = Arrays.stream(keyExtractors)
+                    .map(ke -> ke.apply(t))
+                    .collect(Collectors.toList());
+
+            return seen.putIfAbsent(keys, Boolean.TRUE) == null;
+        };
+    }
 
     final DatapointRepository repository;
 
@@ -39,5 +57,12 @@ public class DatabaseConnector {
 
     public List<Datapoint> getAllDesc(){
         return repository.findAllDesc();
+    }
+    public List<Datapoint> getAllForDayFiltered(int day){
+        List<Datapoint>list=repository.findAllForDay(day);
+        return list.stream().filter(distinctByKeys(Datapoint::getDatapoint_hour,Datapoint::getDatapoint_minute)).collect(Collectors.toList());
+    }
+    public List<Datapoint> getAllForDay(int day){
+        return repository.findAllForDay(day);
     }
 }

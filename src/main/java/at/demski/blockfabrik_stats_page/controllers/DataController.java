@@ -15,8 +15,15 @@ public class DataController {
     }
 
     @GetMapping("/data/list")
-    public String greeting(Model model) {
+    public String dataList(Model model) {
         model.addAttribute("entryList",dbConnector.getAllDesc());
         return "data_list";
+    }
+
+    @GetMapping("/data/charts")
+    public String dataCharts(Model model) {
+        model.addAttribute("dataDay3",dbConnector.getAllForDay(3).toArray());
+        model.addAttribute("dataDay4",dbConnector.getAllForDay(4).toArray());
+        return "data_charts";
     }
 }

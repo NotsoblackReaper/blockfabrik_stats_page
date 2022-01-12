@@ -19,7 +19,7 @@ public class ScheduledTasks {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron="0 */2 7-22 * * *")
+    @Scheduled(cron="0 */2 7-21 * * *")
     public void reportCurrentCount() throws IOException {
         VisitorCount count=VisitorCountManager.GetValue();
         java.util.Date utilDate=new java.util.Date();

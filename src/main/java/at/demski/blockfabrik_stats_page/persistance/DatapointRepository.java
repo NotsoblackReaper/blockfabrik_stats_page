@@ -11,4 +11,7 @@ public interface DatapointRepository extends CrudRepository<Datapoint,Integer> {
 
     @Query(value = "select * from datapoint order by datapoint_date desc, datapoint_hour desc, datapoint_minute desc", nativeQuery = true)
     List<Datapoint> findAllDesc();
+
+    @Query(value="select * from datapoint where datapoint_day=?1",nativeQuery = true)
+    List<Datapoint> findAllForDay(int day);
 }

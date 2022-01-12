@@ -4,19 +4,11 @@
     <title>Blockfabrik Stats Page</title>
       <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
       <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
-      <link rel="stylesheet" th:href="@{/styles/menu-bar.css}"/>
-    <style>
-.content {
-  max-width: 1000px;
-  margin: auto;
-}
-    </style>
+      <th:block th:replace="fragments/general.html :: styles"></th:block>
   </head>
   <body class="content" style="background-color:rgb(43, 43, 43);">
 
-  <div th:replace="fragments/general.html :: header"></div>
-
-  <script>document.getElementById('home').classList.add('active');</script>
+  <div th:replace="fragments/general.html :: header(active='home')"></div>
 
   <div style="margin-bottom: 20px; margin-top: 10px;">
         <div class="html-embed-5 w-embed w-script">     
