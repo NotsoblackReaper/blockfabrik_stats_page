@@ -49,6 +49,11 @@ public class DatabaseConnector {
         c.setTime(time);
         data.setDatapoint_hour(c.get(Calendar.HOUR_OF_DAY));
         data.setDatapoint_minute(c.get(Calendar.MINUTE));
+
+        if(data.getDatapoint_hour()<=7&&data.getDatapoint_minute()<30)
+            return;
+        if(data.getDatapoint_hour()>=22)
+            return;
         data.setDatapoint_act(count.getCounter());
         data.setDatapoint_max(count.getMaxcount());
 

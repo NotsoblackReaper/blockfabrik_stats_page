@@ -1,0 +1,22 @@
+.largechart{
+    width: 750px;
+    height: 400px;
+    background-color: rgb(235, 231, 231);
+    border-radius: 40px;
+    border: 2px solid black;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.smallchart{
+    width: 575px;
+    height: 250px;
+    background-color: rgb(235, 231, 231);
+    border-radius: 20px;
+    border: 2px solid black;
+    padding: 5px;
+    float: left;
+    display: block;
+    margin: 5px;
+}

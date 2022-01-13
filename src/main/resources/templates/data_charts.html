@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <title>Blockfabrik Stats Page: Data Charts</title>
     <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
-    <link rel="stylesheet" th:href="@{/styles/tables.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/charts.css}"/>
     <th:block th:replace="fragments/general.html :: styles"></th:block>
 </head>
 <body class="content" style="background-color:rgb(43, 43, 43);">
 
 <div th:replace="fragments/general.html :: header(active='charts')"></div>
-<div th:replace="fragments/charts.html :: line-chart(${dataDay3})"></div>
+<div th:replace="fragments/charts.html :: chart-base()"></div>
+
+<div th:replace="fragments/charts.html :: simple-bar-chart(${data[0].toArray()},${dayData[0][2]},${dayData[0][3]},${dayData[0][3]})"></div>
+<div th:id="${dayData[0][3]}" class="largechart"></div>
+<div th:each="day,iter: ${dayData}" style="margin-left: auto;margin-right: auto">
+    <div th:unless="${iter.index==0}" th:replace="fragments/charts.html :: simple-bar-chart(${data[iter.index].toArray()},${day[2]},${day[3]},${day[3]})"></div>
+    <div th:unless="${iter.index==0}" th:id="${day[3]}" class="smallchart"></div>
+</div>
 </body>
 </html>
