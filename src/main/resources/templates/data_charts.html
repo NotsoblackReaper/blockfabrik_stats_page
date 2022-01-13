@@ -14,9 +14,12 @@
 
 <div th:replace="fragments/charts.html :: simple-bar-chart(${data[0].toArray()},${dayData[0][2]},${dayData[0][3]},${dayData[0][3]})"></div>
 <div th:id="${dayData[0][3]}" class="largechart"></div>
-<div th:each="day,iter: ${dayData}" style="margin-left: auto;margin-right: auto">
-    <div th:unless="${iter.index==0}" th:replace="fragments/charts.html :: simple-bar-chart(${data[iter.index].toArray()},${day[2]},${day[3]},${day[3]})"></div>
-    <div th:unless="${iter.index==0}" th:id="${day[3]}" class="smallchart"></div>
+
+<div style="margin-left: auto;margin-right: auto;">
+    <th:block th:each="day,iter: ${dayData}">
+        <div th:unless="${iter.index==0}" th:replace="fragments/charts.html :: simple-bar-chart(${data[iter.index].toArray()},${day[2]},${day[3]},${day[3]})"></div>
+        <div th:unless="${iter.index==0}" th:id="${day[3]}" class="smallchart"></div>
+    </th:block>
 </div>
 </body>
 </html>

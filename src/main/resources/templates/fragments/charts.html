@@ -12,9 +12,12 @@
             'packages': ['corechart']
         });
 
+        var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
+
         function refine_data(raw_data){
+            var style='stroke-color: black; stroke-width: 1;color: ';
             var refined_data=[];
-            refined_data[0]=['Zeit','Besucher'];
+            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
             for(var i=0,array_index=1,current_datapoints=0;i<raw_data.length;i++){
                 var time=String(raw_data[i].datapoint_hour).padStart(2, '0')+':'
                 if(raw_data[i].datapoint_minute<30)time+='00';
@@ -22,6 +25,19 @@
                 if(time!=refined_data[array_index-1][0]){
                     if(current_datapoints>0){
                         refined_data[array_index-1][1]=Math.floor((refined_data[array_index-1][1])/current_datapoints);
+                        if(refined_data[array_index-1][1]>160)refined_data[array_index-1][1]=160;
+
+                        refined_data[array_index-1][2]=style;
+
+                        if(refined_data[array_index-1][1]>119)
+                            refined_data[array_index-1][2]+=colors[3];
+                        else if(refined_data[array_index-1][1]>99)
+                            refined_data[array_index-1][2]+=colors[2];
+                        else if(refined_data[array_index-1][1]>39)
+                            refined_data[array_index-1][2]+=colors[1];
+                        else
+                            refined_data[array_index-1][2]+=colors[0];
+
                         current_datapoints=0;
                     }
                     refined_data[array_index]=[time,raw_data[i].datapoint_act];
@@ -33,15 +49,25 @@
                 }
             }
             refined_data[array_index-1][1]=Math.floor((refined_data[array_index-1][1])/current_datapoints);
+            if(refined_data[array_index-1][1]>160)refined_data[array_index-1][1]=160;
+            refined_data[array_index-1][2]=style;
+
+            if(refined_data[array_index-1][1]>130)
+                refined_data[array_index-1][2]+=colors[3];
+            else if(refined_data[array_index-1][1]>100)
+                refined_data[array_index-1][2]+=colors[2];
+            else if(refined_data[array_index-1][1]>50)
+                refined_data[array_index-1][2]+=colors[1];
+            else
+                refined_data[array_index-1][2]+=colors[0];
+
             return refined_data;
         }
     </script>
 </th:block>
 
-<th:block th:fragment="simple-bar-chart(chartData,dayName,divName,methodName)">
-    <script th:inline="javascript" type="text/javascript">
-        function [(${methodName})]()
-        {
+    <script th:fragment="simple-bar-chart(chartData,dayName,divName,methodName)" th:inline="javascript" type="text/javascript">
+        function [(${methodName})](){
                 /*<![CDATA[*/
                 var raw_data = /*[[${chartData}]]*/ ['error'];
                 var dayName = /*[[${dayName}]]*/ 'error';
@@ -49,33 +75,16 @@
                 /*]]>*/
                 if (raw_data.length > 0) {
                     var refined_data = refine_data(raw_data);
-
                 var data = google.visualization.arrayToDataTable(refined_data);
-
                 var options = {
                     isStacked: false,
                     title: 'Besucher ' + dayName,
-                    vAxis: {
-                        minValue: 0,
-                        maxValue: 160
-                    },
-                    series: {
-                        1: {
-                            areaOpacity: 0
-                        }
-                    },
+                    vAxis: {viewWindow:{min: 0,max: 160},gridlines:{count:5,interval:[2,4]}},
+                    hAxis: { },
                     legend: {position: 'none'},
-                    backgroundColor: {
-                        fill: 'transparent',
-                    },
-                    chartArea: {
-                        width: '85%',
-                        height: '80%',
-                        backgroundColor: {},
-                    },
-                    bar: {
-                        groupWidth: "100%"
-                    }
+                    backgroundColor: {fill: 'transparent',},
+                    bar: {groupWidth: "100%"},
+                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
                 };
 
                 var chart = new google.visualization.ColumnChart(document.getElementById(divName));
@@ -85,6 +94,5 @@
 
         google.charts.setOnLoadCallback([(${methodName})]);
     </script>
-</th:block>
 </body>
 </html>
