@@ -1,2 +1,2 @@
-docker build -t blocktest .
-docker run -p 8080:8080 --rm -it blocktest:latest
+docker run -p 8080:8080 --rm -it itsreaper/blockfabrik-stats-page:latest
+docker build -t itsreaper/blockfabrik-stats-page .

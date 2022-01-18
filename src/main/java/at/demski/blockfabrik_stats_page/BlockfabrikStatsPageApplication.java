@@ -10,12 +10,23 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class BlockfabrikStatsPageApplication {
 
-    public static boolean data_scraping;
+    public static boolean data_scraping = false;
 
     public static void main(String[] args) {
-        data_scraping = Boolean.parseBoolean(args[0]);
-        boolean web_server = Boolean.parseBoolean(args[1]);
-        System.out.println("Configuration:\nData Scraping:\t"+data_scraping+"\nWeb Server:\t"+web_server);
+        boolean web_server = true;
+        String scrape_str = System.getenv("DATA_SCRAPING");
+        if (scrape_str != null)
+            data_scraping = Boolean.parseBoolean(scrape_str);
+        String webSv_str = System.getenv("WEB_SERVER");
+        if (webSv_str != null)
+            web_server = Boolean.parseBoolean(webSv_str);
+
+        System.out.println("---------------------------------------------");
+        System.out.println("Starting with Configuration:");
+        System.out.println("Data Scraping: "+data_scraping);
+        System.out.println("Web Server:    "+web_server);
+        System.out.println("---------------------------------------------");
+
         if (web_server)
             SpringApplication.run(BlockfabrikStatsPageApplication.class, args);
         else
