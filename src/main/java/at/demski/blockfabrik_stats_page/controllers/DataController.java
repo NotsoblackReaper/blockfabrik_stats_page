@@ -42,14 +42,16 @@ public class DataController {
         days[0][2]= day_names[currentDay-1];
         days[0][3]="chart_day"+currentDay;
 
-        for(int i=1,day=1;i<=7;++i){
-            if(i==currentDay)
+        //System.out.println("Current day "+currentDay);
+        for(int i=1,day=1;i<=7;++i) {
+            if (i == currentDay)
                 continue;
-            list.add(dbConnector.getAllForDay(day));
-            days[day][0]= String.valueOf(day);
-            days[day][1]= "dataDay"+day;
-            days[day][2]= day_names[day-1];
-            days[day][3]="chart_day"+day;
+            list.add(dbConnector.getAllForDay(i));
+            days[day][0] = String.valueOf(i);
+            days[day][1] = "dataDay" + i;
+            days[day][2] = day_names[i - 1];
+            days[day][3] = "chart_day" + i;
+            //System.out.println("Day " + i + " " + day_names[i - 1]);
             ++day;
         }
 
