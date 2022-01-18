@@ -67,6 +67,11 @@ public class DatabaseConnector {
         List<Datapoint>list=repository.findAllForDay(day);
         return list.stream().filter(distinctByKeys(Datapoint::getDatapoint_hour,Datapoint::getDatapoint_minute)).collect(Collectors.toList());
     }
+
+    public List<Datapoint> getAllDesc(int limit){
+        return repository.findAllDesc();
+    }
+
     public List<Datapoint> getAllForDay(int day){
         return repository.findAllForDay(day);
     }
