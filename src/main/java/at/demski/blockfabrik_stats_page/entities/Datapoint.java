@@ -1,11 +1,15 @@
 package at.demski.blockfabrik_stats_page.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
 
+@NoArgsConstructor
 @Entity
 public class Datapoint {
     @Id
@@ -20,6 +24,14 @@ public class Datapoint {
     private int datapoint_day;
     private int datapoint_hour;
     private int datapoint_minute;
+
+    public Datapoint(int act,int hour,int minute,int day){
+        datapoint_id=0;
+        datapoint_act=act;
+        datapoint_hour=hour;
+        datapoint_minute=minute;
+        datapoint_day=day;
+    }
 
     public int getDatapoint_id() {
         return datapoint_id;

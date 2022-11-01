@@ -1,10 +1,18 @@
 package at.demski.blockfabrik_stats_page.service;
 
+import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
+import at.demski.blockfabrik_stats_page.entities.DayData;
+import at.demski.blockfabrik_stats_page.entities.WeatherData;
+import at.demski.blockfabrik_stats_page.persistance.BlockfabrikDatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
+import at.demski.blockfabrik_stats_page.persistance.DayDataRepository;
+import at.demski.blockfabrik_stats_page.service.utils.DateManager;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,11 +41,21 @@ public class DatabaseConnector {
     }
 
     final DatapointRepository repository;
+    final BlockfabrikDatapointRepository datapointRepository;
+    final DayDataRepository dayRepository;
 
-    public DatabaseConnector(DatapointRepository repository) {
+    public DatabaseConnector(DatapointRepository repository, BlockfabrikDatapointRepository datapointRepository,DayDataRepository dayRepository) {
+        System.out.println("Creating DB Connector");
         this.repository = repository;
+        this.datapointRepository=datapointRepository;
+        this.dayRepository=dayRepository;
+        System.out.println("Created DB Connector");
     }
 
+    /***
+     * @deprecated replaced by {@link #addCurrentData(VisitorCount)}
+     */
+    @Deprecated
     public void insertDatapoint(Date date, Time time, VisitorCount count){
         Datapoint data=new Datapoint();
 
@@ -58,6 +76,34 @@ public class DatabaseConnector {
         data.setDatapoint_max(count.getMaxcount());
 
         repository.save(data);
+    }
+
+    public int addBlankDay(){
+        WeatherData current=WeatherAPI.getCurrentWeather();
+        DayData data=new DayData(null,DateManager.today(),current.temperature,current.downpour,current.wind,false,null);
+        DayData inserted=dayRepository.saveDayData(data);
+        return inserted.getDay_id();
+    }
+
+    /***
+     * Insert a new Datapoint into the "blockfabrik_datapoint" table
+     * Creates a new "day_data" entry if needed
+     * @param count  Current visitor count
+     */
+    public void addCurrentData(VisitorCount count){
+        Integer dayId=dayRepository.getIdForDay(DateManager.today());
+        int id=dayId==null?addBlankDay():dayId;
+
+        BlockfabrikDatapoint datapoint=new BlockfabrikDatapoint(null,id,DateManager.hour(),DateManager.minute(),count.getCounter());
+
+        /*
+        if(datapoint.getHour()<=7&&datapoint.getMinute()<30)
+            return;
+        if(datapoint.getHour()>=22)
+            return;
+        */
+
+        datapointRepository.save(datapoint);
     }
 
     public List<Datapoint> getAllDesc(){

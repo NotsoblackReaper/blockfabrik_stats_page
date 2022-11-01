@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blockfabrik Stats Page: Data Charts</title>
+    <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
+    <link rel="stylesheet" th:href="@{/styles/charts.css}"/>
+    <th:block th:replace="fragments/general.html :: styles"></th:block>
+</head>
+<body class="content" style="background-color:rgb(43, 43, 43);">
+
+<div th:replace="fragments/general.html :: header(active='today')"></div>
+<div th:replace="fragments/charts.html :: chart-base()"></div>
+
+<div th:replace="fragments/charts.html :: large-bar-chart(${data},${dayData[2]},${dayData[3]},${dayData[3]},${currentTime})"></div>
+<div th:id="${dayData[3]}" class="largechart"></div>
+</body>
+</html>

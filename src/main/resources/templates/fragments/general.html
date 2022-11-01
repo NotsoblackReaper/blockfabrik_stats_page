@@ -13,6 +13,7 @@
     <ul id="menu-bar">
         <li><a id="home" th:classappend="${active=='home'} ? active : inactive" th:href="@{/}">Home</a></li>
         <li><a id="data" th:classappend="${active=='data'} ? active : inactive" th:href="@{/data/list}">Data</a></li>
+        <li><a id="today" th:classappend="${active=='today'} ? active : inactive" th:href="@{/data/charts/today}">Today</a></li>
         <li><a id="charts" th:classappend="${active=='charts'} ? active : inactive" th:href="@{/data/charts}">Charts</a></li>
         <li style="float:right"><a th:href="@{https://www.blockfabrik.at}">Blockfabrik</a></li>
     </ul>
