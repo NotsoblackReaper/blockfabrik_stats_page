@@ -26,4 +26,10 @@ public class DateManager {
     public static int day(){
         return Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
     }
+
+    public static int weekday(Date date){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
 }

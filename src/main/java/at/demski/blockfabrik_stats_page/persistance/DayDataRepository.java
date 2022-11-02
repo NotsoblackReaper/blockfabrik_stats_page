@@ -13,4 +13,7 @@ public interface DayDataRepository extends CrudRepository<DayData,Integer> {
     Integer getIdForDay(Date date);
 
     DayData save(DayData dayData);
+
+    @Query(value="select * from day_data order by date desc limit ?1",nativeQuery = true)
+    List<DayData>getAllDesc(int limit);
 }

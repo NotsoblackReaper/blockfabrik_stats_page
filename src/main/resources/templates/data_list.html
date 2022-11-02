@@ -19,24 +19,34 @@
         <span th:unless="${data_scraping}">Deaktiviert</span>
       </div>
     </div>
+  <div>
     <div>
-      <table id="data-list">
+      <table id="day-list">
         <thead>
         <tr>
           <th style="text-align: left;padding-left: 20px;"> Date </th>
-          <th style="text-align: center"> Time </th>
-          <th style="text-align: right;padding-right: 20px;"> Visitors </th>
+          <th style="text-align: center"> Weekday </th>
+          <th style="text-align: center"> °C </th>
+          <th style="text-align: center"> Rain </th>
+          <th style="text-align: right;padding-right: 20px;"> Wind </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="entry : ${entryList}">
+        <tr th:each="day : ${dayList}">
           <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
-          <td style="text-align: left;padding-left: 20px;"><span th:text="${entry.getDatapoint_date()}"> Date </span></td>
-          <td style="text-align: center"><span th:text="${#numbers.formatInteger(entry.getDatapoint_hour(),2)}+':'+${#numbers.formatInteger(entry.getDatapoint_minute(),2)}"> Time </span></td>
-          <td style="text-align: right;padding-right: 20px;"><span th:text="${entry.getDatapoint_act()}"> Count </span></td>
+          <td style="text-align: left;padding-left: 20px;"><span th:text="${day.getDate()}"> Date </span></td>
+          <td style="text-align: center"><span th:text="${day.getWeekday()}"> Time </span></td>
+          <td style="text-align: center"><span th:text="${day.getTemp()}+'°C'"> Time </span></td>
+          <td style="text-align: center"><span th:text="${day.getRain()}+'mm'"> Time </span></td>
+          <td style="text-align: center"><span th:text="${day.getWind()}+'m/s'"> Time </span></td>
         </tr>
         </tbody>
       </table>
     </div>
-    </body>
+    <div>
+      <!--List datapoints-->
+
+    </div>
+  </div>
+  </body>
 </html>

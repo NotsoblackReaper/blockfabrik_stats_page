@@ -84,17 +84,19 @@ public class DBMigration {
     }
 
     public int generateDay(Date date) {
-        String query = "insert into day_data (date, temp, rain, wind, holiday, holiday_name) values (?,?,?,?,?,?)";
+        String query = "insert into day_data (date,weekday, temp, rain, wind, holiday, holiday_name,historic) values (?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setDate(1, date);
             WeatherData data=WeatherAPI.getWeather(date);
 
-            stmt.setFloat(2, data.temperature);
-            stmt.setFloat(3, data.downpour);
-            stmt.setFloat(4, data.wind);
+            stmt.setFloat(2, DateManager.weekday(date));
+            stmt.setFloat(3, data.temperature);
+            stmt.setFloat(4, data.downpour);
+            stmt.setFloat(5, data.wind);
 
-            stmt.setBoolean(5, false);
-            stmt.setString(6, null);
+            stmt.setBoolean(6, false);
+            stmt.setString(7, null);
+            stmt.setBoolean(8, date.compareTo(DateManager.today())!=0);
 
             System.out.println("Inserting: " + data);
 

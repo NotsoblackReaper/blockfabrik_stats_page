@@ -24,14 +24,22 @@ public class ScheduledTasks {
 
     @Scheduled(cron="0 */5 7-21 * * *")
     @ConditionalOnProperty(value = "BlockfabrikStatsPageApplication.data_scraping",matchIfMissing = false,havingValue = "true")
-    //@Scheduled(cron="0 */1 * * * *")
     public void reportCurrentCount() throws IOException {
         System.out.println("Trying to add datapoint");
         if(!BlockfabrikStatsPageApplication.data_scraping)return;
         VisitorCount count=VisitorCountManager.GetValue();
-        //java.util.Date utilDate=new java.util.Date();
-        //dbConnector.insertDatapoint(new Date(utilDate.getTime()),new Time(utilDate.getTime()),count);
         System.out.println("Trying to add datapoint");
         dbConnector.addCurrentData(count);
+    }
+
+    @Scheduled(cron="0 0 7 * * *")
+    @ConditionalOnProperty(value = "BlockfabrikStatsPageApplication.data_scraping",matchIfMissing = false,havingValue = "true")
+    public void updatePastDay() throws IOException {
+
+    }
+
+    @Scheduled(cron="0/10 * * * * *")
+    public void heartbeat() {
+        System.out.println("Running!");
     }
 }

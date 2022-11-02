@@ -80,7 +80,7 @@ public class DatabaseConnector {
 
     public int addBlankDay(){
         WeatherData current=WeatherAPI.getCurrentWeather();
-        DayData data=new DayData(null,DateManager.today(),current.temperature,current.downpour,current.wind,false,null);
+        DayData data=new DayData(DateManager.today(),current.temperature,current.downpour,current.wind,false,null,false);
         DayData inserted=dayRepository.save(data);
         return inserted.getDay_id();
     }
@@ -121,4 +121,6 @@ public class DatabaseConnector {
     public List<Datapoint> getAllForDay(int day){
         return repository.findAllForDay(day);
     }
+
+    public List<DayData>getDayDataDesc(int limit){return dayRepository.getAllDesc(limit);}
 }
