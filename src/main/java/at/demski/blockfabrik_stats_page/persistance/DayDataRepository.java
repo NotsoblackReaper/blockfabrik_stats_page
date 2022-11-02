@@ -9,8 +9,8 @@ import java.sql.Date;
 import java.util.List;
 
 public interface DayDataRepository extends CrudRepository<DayData,Integer> {
-    @Query(value="select day_id from day_data where date=?1;",nativeQuery = true)
+    @Query(value="select day_id from day_data where date=?1",nativeQuery = true)
     Integer getIdForDay(Date date);
 
-    DayData saveDayData(DayData dayData);
+    DayData save(DayData dayData);
 }

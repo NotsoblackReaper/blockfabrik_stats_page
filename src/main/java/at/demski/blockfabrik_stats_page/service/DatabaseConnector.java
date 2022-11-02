@@ -81,7 +81,7 @@ public class DatabaseConnector {
     public int addBlankDay(){
         WeatherData current=WeatherAPI.getCurrentWeather();
         DayData data=new DayData(null,DateManager.today(),current.temperature,current.downpour,current.wind,false,null);
-        DayData inserted=dayRepository.saveDayData(data);
+        DayData inserted=dayRepository.save(data);
         return inserted.getDay_id();
     }
 

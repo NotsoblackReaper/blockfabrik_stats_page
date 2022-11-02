@@ -22,9 +22,9 @@ public class ScheduledTasks {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    //@Scheduled(cron="0 */5 7-21 * * *")
+    @Scheduled(cron="0 */5 7-21 * * *")
     @ConditionalOnProperty(value = "BlockfabrikStatsPageApplication.data_scraping",matchIfMissing = false,havingValue = "true")
-    @Scheduled(cron="0/30 * * ? * * *")
+    //@Scheduled(cron="0 */1 * * * *")
     public void reportCurrentCount() throws IOException {
         System.out.println("Trying to add datapoint");
         if(!BlockfabrikStatsPageApplication.data_scraping)return;
@@ -33,10 +33,5 @@ public class ScheduledTasks {
         //dbConnector.insertDatapoint(new Date(utilDate.getTime()),new Time(utilDate.getTime()),count);
         System.out.println("Trying to add datapoint");
         dbConnector.addCurrentData(count);
-    }
-
-    @Scheduled(cron="* * * ? * * *")
-    public void test() {
-        System.out.println("test");
     }
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.sql.Date;
 
@@ -15,6 +16,7 @@ import java.sql.Date;
 @Setter
 @Entity
 public class DayData {
+    @GeneratedValue
     @Id
     Integer day_id;
     public Date date;
