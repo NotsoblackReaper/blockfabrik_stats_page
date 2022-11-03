@@ -23,8 +23,8 @@ function makeColor(value) {
 }
 
 let url = "https://www.boulderado.de/boulderadoweb/gym-clientcounter/index.php?mode=get&token=eyJhbGciOiJIUzI1NiIsICJ0eXAiOiJKV1QifQ.eyJjdXN0b21lciI6IkJsb2NrZmFicmlrV2llbiJ9.yymz1Eg_-jX28iMdaq1aGVb0iD4-29uWVkuxZd7a_9U&raw=1";
-let visitors = document.getElementById('visitors');
-let free = document.getElementById('free');
+let customers = document.getElementById('customers');
+//let free = document.getElementById('free');
 
 var counter=-1;
 var maxcount=-1;
@@ -39,13 +39,14 @@ var obj = JSON.parse(data);
 counter = obj.counter;
 maxcount = obj.maxcount;
 
-visitors.innerText=counter;
-free.innerText=maxcount-counter;
+customers.innerText=counter;
+//free.innerText=maxcount-counter;
 
-var percent = ((counter / maxcount) * 100) + 9;
+var percent = ((counter / maxcount) * 100);
 if (percent > 105)
-    percent = 105;
+    percent = 100;
 var percentile = percent + "%";
 
-document.getElementById("arrow_bar").style.width = percentile; 
+document.getElementById("slider-fill").style.height = percentile;
+document.getElementById("slider-label").innerText = Math.round(percent)+'%';
 }).catch(err => { throw err });

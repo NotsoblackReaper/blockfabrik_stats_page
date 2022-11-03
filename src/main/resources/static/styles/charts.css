@@ -20,3 +20,33 @@
     display: block;
     margin: 5px;
 }
+
+#chart-prev{
+    float: left;
+    margin-left: 5vw;
+}
+
+#chart-next{
+    float:right;
+    margin-right: 5vw;
+}
+
+#chart-prev a:hover, #chart-next a:hover{
+    background-color: #111;
+}
+
+#chart-prev a,#chart-next a{
+    font-family: 'Asap', sans-serif;
+    font-size: 3vh;
+    font-max-size: 2vw;
+    border-radius: 1.5vh;
+    padding: .5vh 1vh;
+    overflow: hidden;
+    background-color: #333;
+    color:white;
+    text-decoration: none;
+}
+
+#chart-prev a i,#chart-next a i{
+    height: 3vh;
+}

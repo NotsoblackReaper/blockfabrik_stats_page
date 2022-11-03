@@ -25,10 +25,9 @@ public class ScheduledTasks {
     @Scheduled(cron="0 */5 7-21 * * *")
     @ConditionalOnProperty(value = "BlockfabrikStatsPageApplication.data_scraping",matchIfMissing = false,havingValue = "true")
     public void reportCurrentCount() throws IOException {
-        System.out.println("Trying to add datapoint");
+        System.out.println("Recording datapoint");
         if(!BlockfabrikStatsPageApplication.data_scraping)return;
         VisitorCount count=VisitorCountManager.GetValue();
-        System.out.println("Trying to add datapoint");
         dbConnector.addCurrentData(count);
     }
 
@@ -38,7 +37,7 @@ public class ScheduledTasks {
 
     }
 
-    @Scheduled(cron="0/10 * * * * *")
+    //@Scheduled(cron="0/10 * * * * *")
     public void heartbeat() {
         System.out.println("Running!");
     }

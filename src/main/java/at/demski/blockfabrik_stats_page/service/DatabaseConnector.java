@@ -78,11 +78,12 @@ public class DatabaseConnector {
         repository.save(data);
     }
 
-    public int addBlankDay(){
+    public DayData addBlankDay(){
         WeatherData current=WeatherAPI.getCurrentWeather();
         DayData data=new DayData(DateManager.today(),current.temperature,current.downpour,current.wind,false,null,false);
         DayData inserted=dayRepository.save(data);
-        return inserted.getDay_id();
+        System.out.println("Adding new Day with id "+inserted);
+        return inserted;
     }
 
     /***
@@ -91,18 +92,18 @@ public class DatabaseConnector {
      * @param count  Current visitor count
      */
     public void addCurrentData(VisitorCount count){
-        Integer dayId=dayRepository.getIdForDay(DateManager.today());
-        int id=dayId==null?addBlankDay():dayId;
+        DayData day=dayRepository.getDaybyDate(DateManager.today());
+        if(day==null)day=addBlankDay();
+        BlockfabrikDatapoint datapoint=
+                new BlockfabrikDatapoint(null,day.getDay_id(),
+                        DateManager.hour(),DateManager.minute(),count.getCounter());
 
-        BlockfabrikDatapoint datapoint=new BlockfabrikDatapoint(null,id,DateManager.hour(),DateManager.minute(),count.getCounter());
-
-        /*
         if(datapoint.getHour()<=7&&datapoint.getMinute()<30)
             return;
         if(datapoint.getHour()>=22)
             return;
-        */
 
+        System.out.println("Inserting Datapoint:\n"+datapoint);
         datapointRepository.save(datapoint);
     }
 
