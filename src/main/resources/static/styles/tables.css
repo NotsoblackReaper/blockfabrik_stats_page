@@ -2,7 +2,7 @@
     width: 40%;
     border: 2px solid black;
     border-radius: 10px;
-    background-color: rgb(235, 231, 231);
+    background-color: var(--content-background-color);
     padding-bottom: 5px;
     padding-top:3px;
     margin-left: auto;
@@ -13,7 +13,7 @@
     width: 20%;
     border: 2px solid black;
     border-radius: 10px;
-    background-color: rgb(235, 231, 231);
+    background-color: var(--content-background-color);
     padding-bottom: 5px;
     padding-top:3px;
     margin-left: auto;
@@ -24,13 +24,11 @@
     font-family: 'Asap', sans-serif;
     font-size: 25px;
     font-weight: bold;
-    color: rgba(0,0,0,0.7);
     text-align: center;
 }
 #data-scraping-status .value{
     font-family: 'Asap', sans-serif;
     font-weight: bold;
-    color: rgba(0,0,0,0.7);
     text-align: center;
 }
 #data-scraping-status .value span{

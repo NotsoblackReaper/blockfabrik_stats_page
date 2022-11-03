@@ -5,19 +5,14 @@
     <title>Blockfabrik Stats Page: Data Charts</title>
     <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
     <link rel="stylesheet" th:href="@{/styles/charts.css}"/>
-    <th:block th:replace="fragments/general.html :: styles"></th:block>
 </head>
 <body class="content">
 
-<div th:replace="fragments/general.html :: header(active='stosszeiten')"></div>
 <div th:replace="fragments/charts.html :: chart-base()"></div>
-<div>
-    <span id="chart-prev"><a th:href="@{'/data/charts/day/'+${((current+5)%7)+1}}"><i th:src="@{/imgs/chevrons.ico}"></i>Previous</a></span>
-    <span id="chart-next"><a th:href="@{'/data/charts/day/'+${(current%7)+1}}">Next<i th:src="@{/imgs/chevrons.ico}"></i></a></span>
-</div>
-<!--
+
+
 <div th:replace="fragments/charts.html :: large-bar-chart(${data},${dayData[2]},${dayData[3]},${dayData[3]},${currentTime})"></div>
-<div th:id="${dayData[3]}" class="largechart"></div>
--->
+<div th:id="${dayData[3]}" class="fullscreen-chart"></div>
+
 </body>
 </html>

@@ -1,0 +1,16 @@
+#indexChart{
+    width: 100%;
+    height: 100%;
+
+    padding: 5px;
+    color:white;
+}
+
+.nav-button-left{
+    float: left;
+    border-right: 2px solid var(--border-color);
+}
+
+.nav-button-right{
+    float: right;
+}

@@ -4,15 +4,98 @@
     <title>Blockfabrik Stats Page</title>
     <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
     <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
-    <link rel="stylesheet" th:href="@{/styles/slider.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/index.css}"/>
     <th:block th:replace="fragments/general.html :: styles"></th:block>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load('current', {'packages':['corechart']});
+
+        var colors=['#7fbd5b','#5281c0','#b2924c','#9d4c36']
+
+        function refine_data(raw_data,current_time){
+            const start = performance.now();
+
+            var style='stroke-color: black; stroke-width: 1;opacity: 1;';
+            var refined_data=[];
+            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
+            for(var i=0,array_index=1;i<raw_data.length;i++){
+                var time=String(raw_data[i].datapoint_hour).padStart(2, '0')+':'+String(raw_data[i].datapoint_minute).padStart(2, '0')
+                let value=raw_data[i].datapoint_act;
+                let tmp_style=style;
+                if(current_time!=null){
+                    let curr_min=current_time%100;
+                    if(curr_min<30)curr_min=30;
+                    else curr_min=60;
+                    let curr_hrs=Math.floor(current_time/100);
+                    if(raw_data[i].datapoint_hour>curr_hrs||raw_data[i].datapoint_minute>curr_min)
+                        tmp_style='stroke-color: black; stroke-width: 0;opacity: 0.5;';
+                }
+                tmp_style+='color: ';
+                if(value>119)
+                    tmp_style+=colors[3];
+                else if(value>99)
+                    tmp_style+=colors[2];
+                else if(value>39)
+                    tmp_style+=colors[1];
+                else
+                    tmp_style+=colors[0];
+
+                refined_data[i+1]=[time,value,tmp_style];
+            }
+            const duration = performance.now() - start;
+
+            console.log("Refine data duration: "+duration);
+
+            return refined_data;
+        }
+    </script>
+    <script th:inline="javascript" type="text/javascript">
+        let start_draw=0;
+        let duration = 0;
+
+        function drawChart() {
+            start_draw = performance.now();
+            /*<![CDATA[*/
+            var raw_data = /*[[${data}]]*/ ['error'];
+            var dayName = /*[[${dayName}]]*/ 'error';
+            var currentTime = /*[[${currentTime}]]*/ 'error';
+            /*]]>*/
+            var divName = 'indexChart';
+            if (raw_data.length > 0) {
+                var refined_data = refine_data(raw_data,currentTime);
+                var data = google.visualization.arrayToDataTable(refined_data);
+                var options = {
+                    isStacked: false,
+                    title: 'Besucher ' + dayName,
+                    vAxis: {viewWindow:{min: 0,max: 160},gridlines:{count:5,interval:[2,4]}},
+                    hAxis: { },
+                    legend: {position: 'none'},
+                    backgroundColor: {fill: 'transparent',},
+                    bar: {groupWidth: "100%"},
+                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
+                };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById(divName));
+                chart.draw(data, options);
+                duration = performance.now() - start_draw;
+                console.log("Draw chart Duration: "+duration);
+            }
+        }
+
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
 </head>
 <body>
 
 <nav th:replace="fragments/general.html :: header(active='home')"></nav>
+
 <main>
     <article>
-        <div class="article-chart article-section"></div>
+        <div class="article-chart article-section">
+            <div id="indexChart" class=""></div>
+        </div>
         <div class="article-status article-section"
              th:style="'background-image: url(' + @{/imgs/fahrraeder.jpg} + ');background-size:cover;'">
             <div id="slider-background">
@@ -27,12 +110,20 @@
             </div>
             <script th:src="@{/js/setSlider.js}"></script>
         </div>
-        <div class="article-content article-section"></div>
-        <div class="article-nav article-section"></div>
+        <div class="article-content article-section">
+        </div>
+        <div class="article-nav article-section">
+            <a class="article-nav-button nav-button-left" th:href="@{'/?day='+${((current+6)%7)}}">
+                <img th:src="@{/imgs/chevrons.ico}"></a>
+            </a>
+            <a class="article-nav-button nav-button-right" th:href="@{'/?day='+${(current+1)%7}}">
+                <img th:src="@{/imgs/chevrons.ico}"></a>
+            </a>
+        </div>
+        <div class=" article-section">
+            <!--<iframe width="100%" height="100%" src="https://www.blockfabrik.at" title="Test" allow=""></iframe>-->
+        </div>
     </article>
-    <article></article>
-    <article></article>
-    <article></article>
 </main>
 <!--<main>
     <div style="margin-bottom: 20px; margin-top: 10px;">

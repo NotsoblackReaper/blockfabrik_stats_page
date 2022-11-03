@@ -1,3 +1,49 @@
+main > article{
+    display:grid;
+    height: 100%;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1.5fr .5fr 1fr;
+}
+
+.article-chart{
+
+}
+
+.article-status{
+
+}
+
+.article-nav{
+
+}
+
+.article-nav-button{
+    background-color: var(--content-background-color);
+    height: 100%;
+    width: 50%;
+    position: relative;
+}
+
+.article-nav-button > img{
+    filter: invert(100%);
+
+    position: absolute;
+    left:50%;
+    top:50%;
+    width: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.nav-button-left > img{
+    transform: translate(-50%,-50%) rotate(180deg);
+}
+
+.article-content{
+    grid-row: 2/4;
+}
+
+
+/*Slider Vertical*/
 #slider-background,
 #slider-label{
     border: 2px solid white;
@@ -69,7 +115,6 @@
     height: calc(60%/1.618);
     width: 60%;
     min-width: 16vh;
-
 }
 
 #status-description > p{

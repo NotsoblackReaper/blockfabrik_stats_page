@@ -47,6 +47,9 @@ if (percent > 105)
     percent = 100;
 var percentile = percent + "%";
 
+if(window.matchMedia("(min-width: 1101px)").matches)
 document.getElementById("slider-fill").style.height = percentile;
+else
+    document.getElementById("slider-fill").style.width = percentile;
 document.getElementById("slider-label").innerText = Math.round(percent)+'%';
 }).catch(err => { throw err });

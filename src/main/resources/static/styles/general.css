@@ -39,7 +39,7 @@ nav > .nav-section > a{
     font-family: "Montserrat", sans-serif;
 }
 
-h1,h2,h3,a,p,span{
+h1,h2,h3,a,p,span,td,th{
     font-family: 'Be Vietnam Pro', sans-serif;
     font-weight: 400;
     color: white;
@@ -72,10 +72,6 @@ nav > #nav-logo > a > img{
     max-height: 40px;
 }
 
-main{
-    flex-grow: 1;
-}
-
 #nav-logo,#nav-link{
     flex-basis: calc(100%/3);
 }
@@ -94,12 +90,6 @@ main{
 main{
     background-color: gray;
     flex-grow: 1;
-}
-
-main > article{
-    display:grid;
-    height: 100%;
-    grid-template-columns: 2fr 1fr;
 }
 
 main > article > .article-section{

@@ -106,11 +106,11 @@ public class ChartsController {
         return "data_charts";
     }
 
-    //@GetMapping("/data/charts/today")
-    public String dataChartsToday(Model model) {
+    @GetMapping("/data/charts/day/{dayNr}")
+    public String dataChartForDay(Model model, @PathVariable("dayNr") int day) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
-        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        int currentDay = day;
         int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
 
 
@@ -152,7 +152,7 @@ public class ChartsController {
         model.addAttribute("data", halfHourAverageList.toArray());
         model.addAttribute("dayData", days);
         model.addAttribute("currentTime", currentTime);
-        return "data_chart_current";
+        return "data_chart_single";
     }
 
     @GetMapping("/data/charts/today")
@@ -160,7 +160,7 @@ public class ChartsController {
         return "redirect:/data/charts/day/"+DateManager.day();
     }
 
-    @GetMapping("/data/charts/day/{dayNr}")
+    //@GetMapping("/data/charts/day/{dayNr}")
     public String chartForDay(Model model, @PathVariable("dayNr") int day){
         model.addAttribute("current",day);
         return "data_chart_single";
