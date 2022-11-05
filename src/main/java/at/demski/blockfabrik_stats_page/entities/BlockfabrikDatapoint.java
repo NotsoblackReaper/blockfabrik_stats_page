@@ -14,7 +14,9 @@ public class BlockfabrikDatapoint {
     @GeneratedValue
     @Id
     private Integer datapoint_id;
-    private Integer day;
+    @ManyToOne
+    @JoinColumn(name = "day_id", nullable = true)
+    private DayData day;
     private int hour;
     private int minute;
     private int value;

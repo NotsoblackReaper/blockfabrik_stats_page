@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface BlockfabrikDatapointRepository extends CrudRepository<BlockfabrikDatapoint,Integer> {
 
+    BlockfabrikDatapoint save(BlockfabrikDatapoint datapoint);
 }

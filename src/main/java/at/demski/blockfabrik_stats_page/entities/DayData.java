@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,15 +19,19 @@ import java.sql.Date;
 public class DayData {
     @GeneratedValue
     @Id
-    Integer day_id;
-    public Date date;
-    public int weekday;
-    public float temp;
-    public float rain;
-    public float wind;
-    public boolean holiday;
-    public String holiday_name;
-    public boolean historic;
+    private Integer dayId;
+    private Date date;
+    private int weekday;
+    private float temp;
+    private float rain;
+    private float wind;
+    private boolean holiday;
+    private String holiday_name;
+    private boolean historic;
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "day")
+    private Set<BlockfabrikDatapoint>datapoints=new HashSet<>();
+
 
     public DayData(Date date, float temp, float rain, float wind, boolean holiday, String holiday_name, boolean historic) {
         this.date = date;

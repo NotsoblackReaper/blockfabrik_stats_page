@@ -11,13 +11,8 @@ import at.demski.blockfabrik_stats_page.service.utils.DateManager;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -95,7 +90,7 @@ public class DatabaseConnector {
         DayData day=dayRepository.getDaybyDate(DateManager.today());
         if(day==null)day=addBlankDay();
         BlockfabrikDatapoint datapoint=
-                new BlockfabrikDatapoint(null,day.getDay_id(),
+                new BlockfabrikDatapoint(null,day,
                         DateManager.hour(),DateManager.minute(),count.getCounter());
 
         if(datapoint.getHour()<=7&&datapoint.getMinute()<30)
@@ -124,4 +119,42 @@ public class DatabaseConnector {
     }
 
     public List<DayData>getDayDataDesc(int limit){return dayRepository.getAllDesc(limit);}
+
+    private float getMedian(List<Datapoint> datapointList, final int time) {
+        List<Integer> data = datapointList.stream().filter(d -> d.getDatapoint_hour() * 60 + d.getDatapoint_minute() == time)
+                .map(Datapoint::getDatapoint_act).sorted().collect(Collectors.toList());
+        return (float) data.stream().mapToInt(value -> value).average().orElse(Double.NaN);
+    }
+
+    public List<Datapoint> getHalfHourAverages(int day){
+        List<Datapoint> rawlist;
+        List<Datapoint> medianList = new ArrayList<>();
+
+        rawlist = getAllForDay(day);
+
+        for (int j = 7 * 60 + 30; j < 22 * 60; j += 2) {
+            float median = getMedian(rawlist, j);
+            medianList.add(new Datapoint(Math.round(median), j / 60, j % 60, day));
+        }
+
+        List<Datapoint> points = new ArrayList<>();
+        float sum = 0;
+        int n = 0;
+        for (int j = 0; j < medianList.size(); ++j) {
+            Datapoint p = medianList.get(j);
+            sum += p.getDatapoint_act();
+            ++n;
+            if (p.getDatapoint_minute() == 28 || p.getDatapoint_minute() == 58) {
+                points.add(new Datapoint(
+                        Math.round(sum / n),
+                        p.getDatapoint_hour() + (p.getDatapoint_minute() == 28 ? 0 : 1),
+                        p.getDatapoint_minute() == 28 ? 30 : 0,
+                        p.getDatapoint_day()));
+                sum = 0;
+                n = 0;
+            }
+        }
+
+        return points;
+    }
 }

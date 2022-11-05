@@ -2,7 +2,7 @@ function intToHex(i) {
     var hex = parseInt(i).toString(16);
     return (hex.length < 2) ? "0" + hex : hex;
 }
-    
+
 function makeColor(value) {
     // value must be between [0, 510]
     value = Math.min(Math.max(0,value), 1) * 510;
@@ -26,15 +26,15 @@ let url = "https://www.boulderado.de/boulderadoweb/gym-clientcounter/index.php?m
 let customers = document.getElementById('customers');
 //let free = document.getElementById('free');
 
-var counter=-1;
-var maxcount=-1;
+let counter=-1;
+let maxcount=-1;
 
 fetch(url)
 .then(res => res.json())
 .then((out) => {
 
 data = JSON.stringify(out, null, 4);
-var obj = JSON.parse(data);
+let obj = JSON.parse(data);
 
 counter = obj.counter;
 maxcount = obj.maxcount;
@@ -42,10 +42,10 @@ maxcount = obj.maxcount;
 customers.innerText=counter;
 //free.innerText=maxcount-counter;
 
-var percent = ((counter / maxcount) * 100);
+let percent = ((counter / maxcount) * 100);
 if (percent > 105)
     percent = 100;
-var percentile = percent + "%";
+let percentile = percent + "%";
 
 if(window.matchMedia("(min-width: 1101px)").matches)
 document.getElementById("slider-fill").style.height = percentile;

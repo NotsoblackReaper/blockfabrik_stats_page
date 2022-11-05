@@ -56,12 +56,25 @@ public class WeatherAPI {
             in.close();
             con.disconnect();
 
-            String regex = "Temperatur(<[^>]+>)+:(<[^>]+>)+\\s*(\\d+,?\\d+)";
-            Pattern pattern = Pattern.compile(regex);
+            String regexTemp = "Temperatur(<[^>]+>)+:(<[^>]+>)+\\s*(\\d+,?\\d+)";
+            String regexWind = "Wind(<[^>]+>)+:(<[^>]+>)+\\s*[A-Za-z]+,\\s(\\d+,?\\d+)";
+            String regexRain="Niederschlag(<[^>]+>)+:(<[^>]+>)+\\s*\\s(\\d+,?\\d+)";
+            Pattern pattern = Pattern.compile(regexTemp);
             Matcher matcher = pattern.matcher(content);
+            float temp=0;
+            float wind=0;
+            float rain=0;
             if(matcher.find())
-                return new WeatherData(Float.parseFloat(matcher.group(3).replace(',', '.')), 0, 0, new Date(System.currentTimeMillis()));
-            return new WeatherData(0,0,0,new Date(System.currentTimeMillis()));
+                temp= Float.parseFloat(matcher.group(3).replace(',', '.'));
+            pattern=Pattern.compile(regexWind);
+            matcher=pattern.matcher(content);
+            if(matcher.find())
+                wind=Float.parseFloat(matcher.group(3).replace(',', '.'))*3.6f;
+            pattern=Pattern.compile(regexRain);
+            matcher=pattern.matcher(content);
+            if(matcher.find())
+                rain=Float.parseFloat(matcher.group(3).replace(',', '.'));
+            return new WeatherData(temp,rain,wind,DateManager.today());
         } catch (IOException e) {
             e.printStackTrace();
         }

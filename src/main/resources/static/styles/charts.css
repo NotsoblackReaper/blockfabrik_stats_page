@@ -1,54 +1,14 @@
-.largechart{
-    width: 900px;
-    height: 400px;
-    background-color: rgb(235, 231, 231);
-    border-radius: 40px;
-    border: 2px solid black;
+.chart-large{
+    width: 75%;
+    height: 100%;
     padding: 5px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-.smallchart{
-    width: 575px;
-    height: 250px;
-    background-color: rgb(235, 231, 231);
-    border-radius: 20px;
-    border: 2px solid black;
-    padding: 5px;
-    float: left;
+.chart-small{
+    width: 100%;
+    height: 100%;
     display: block;
-    margin: 5px;
-}
-
-#chart-prev{
-    float: left;
-    margin-left: 5vw;
-}
-
-#chart-next{
-    float:right;
-    margin-right: 5vw;
-}
-
-#chart-prev a:hover, #chart-next a:hover{
-    background-color: #111;
-}
-
-#chart-prev a,#chart-next a{
-    font-family: 'Asap', sans-serif;
-    font-size: 3vh;
-    font-max-size: 2vw;
-    border-radius: 1.5vh;
-    padding: .5vh 1vh;
-    overflow: hidden;
-    background-color: #333;
-    color:white;
-    text-decoration: none;
-}
-
-#chart-prev a i,#chart-next a i{
-    height: 3vh;
+    padding: 5px;
 }
 
 .fullscreen-chart{

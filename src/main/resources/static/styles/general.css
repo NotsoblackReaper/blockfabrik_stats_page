@@ -60,7 +60,11 @@ a{
 
 #nav-external{
     flex-grow: 1;
-    justify-content: flex-end;
+    justify-content: center;
+}
+
+#nav-link{
+    justify-content: center;
 }
 
 #nav-link > a{
@@ -95,5 +99,4 @@ main{
 main > article > .article-section{
     border:1px solid var(--border-color);
     height: 100%;
-
 }

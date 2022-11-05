@@ -32,4 +32,9 @@ public class DateManager {
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
+
+    public static String dayName(int day){
+        String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
+        return day_names[day];
+    }
 }

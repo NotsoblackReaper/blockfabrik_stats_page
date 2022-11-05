@@ -1,0 +1,11 @@
+main > article{
+    display:grid;
+    height: 100%;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.75fr 1fr 1fr 1fr;
+}
+
+.article-chart-main{
+    grid-column: 1/3;
+}

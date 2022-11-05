@@ -5,10 +5,10 @@
 </head>
 <body>
 <div th:fragment="styles">
+    <script src="https://kit.fontawesome.com/8c335883c7.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" th:href="@{/styles/menu-bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/general.css}"/>
-    <link rel="stylesheet" th:href="@{/styles/stylesWidescreen.css}" media="screen and (min-width: 1101px)"/>
-    <link rel="stylesheet" th:href="@{/styles/stylesSlim.css}" media="screen and (max-width: 1100px)"/>
 </div>
 
 <div >
@@ -22,7 +22,7 @@
     <nav th:fragment="header(active)">
         <div id="nav-logo" class="nav-section">
             <a href="#">
-                <img th:src="@{/imgs/blockfabrik_icon_large_white.png}">
+                <img th:src="@{/imgs/blockfabrik_icon_small_white.png}">
             </a>
         </div>
         <div id="nav-link" class="nav-section">
@@ -34,9 +34,10 @@
             <a href="https://www.blockfabrik.at">BLOCKFABRIK</a>
         </div>
         <div id="nav-social" class="nav-section">
-            <a href="https://www.linkedin.com/in/jonas-d-3300321b8/"><img class="icon" th:src="@{/imgs/icons/linkedin.ico}"></a>
-            <a href="https://github.com/NotsoblackReaper"><img class="icon" id="icon-github" th:src="@{/imgs/icons/github.ico}"></a>
-            <a href="https://twitter.com/its_a_Reaper"><img class="icon" th:src="@{/imgs/icons/twitter.ico}"></a>
+            <a href="https://www.linkedin.com/in/jonas-d-3300321b8/"><i class="fa-brands fa-linkedin"></i><!--<img class="icon" th:src="@{/imgs/icons/linkedin.ico}">--></a>
+            <a href="https://github.com/NotsoblackReaper"><i class="fa-brands fa-github"></i><!--<img class="icon" id="icon-github" th:src="@{/imgs/icons/github.ico}">--></a>
+            <a href="https://twitter.com/its_a_Reaper"><i class="fa-brands fa-twitter"></i><!--<img class="icon" th:src="@{/imgs/icons/twitter.ico}">--></a>
+            <a href="https://www.instagram.com/notsoblackreaper/"><i class="fa-brands fa-instagram"></i><!--<img class="icon" th:src="@{/imgs/icons/instagram.ico}">--></a>
         </div>
     </nav>
     <!--

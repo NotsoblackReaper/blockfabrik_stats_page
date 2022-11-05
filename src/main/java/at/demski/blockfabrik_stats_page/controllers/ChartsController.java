@@ -113,41 +113,11 @@ public class ChartsController {
         int currentDay = day;
         int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
 
-
         String[] days;
         String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
-
-        List<Datapoint> rawlist;
-        List<Datapoint> medianList = new ArrayList<>();
-        List<Datapoint> halfHourAverageList = new ArrayList<>();
-
-        rawlist = dbConnector.getAllForDay(currentDay);
         days = getDayData(currentDay, day_names);
 
-        for (int j = 7 * 60 + 30; j < 22 * 60; j += 2) {
-            float median = getMedian(rawlist, j);
-            medianList.add(new Datapoint(Math.round(median), j / 60, j % 60, currentDay));
-        }
-
-        List<Datapoint> points = new ArrayList<>();
-        float sum = 0;
-        int n = 0;
-        for (int j = 0; j < medianList.size(); ++j) {
-            Datapoint p = medianList.get(j);
-            sum += p.getDatapoint_act();
-            ++n;
-            if (p.getDatapoint_minute() == 28 || p.getDatapoint_minute() == 58) {
-                points.add(new Datapoint(
-                        Math.round(sum / n),
-                        p.getDatapoint_hour() - (p.getDatapoint_minute() == 28 ? 1 : 0),
-                        p.getDatapoint_minute() == 28 ? 0 : 30,
-                        p.getDatapoint_day()));
-                sum = 0;
-                n = 0;
-            }
-        }
-
-        halfHourAverageList = points;
+        List<Datapoint> halfHourAverageList = dbConnector.getHalfHourAverages(currentDay);
 
         model.addAttribute("data", halfHourAverageList.toArray());
         model.addAttribute("dayData", days);
