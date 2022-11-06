@@ -1,16 +1,14 @@
 package at.demski.blockfabrik_stats_page.entities;
 
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -29,6 +27,7 @@ public class DayData {
     private String holiday_name;
     private boolean historic;
 
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "day")
     private Set<BlockfabrikDatapoint>datapoints=new HashSet<>();
 

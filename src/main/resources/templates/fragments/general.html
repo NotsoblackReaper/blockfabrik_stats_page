@@ -12,13 +12,6 @@
 </div>
 
 <div >
-    <!--<ul id="menu-bar">
-        <li><a id="home" th:classappend="${active=='home'} ? active : inactive" th:href="@{/}">Home</a></li>
-        <li><a id="data" th:classappend="${active=='data'} ? active : inactive" th:href="@{/data/list}">Data</a></li>
-        <li><a id="today" th:classappend="${active=='stosszeiten'} ? active : inactive" th:href="@{/data/charts/today}">Stosszeiten</a></li>
-        <li><a id="charts" th:classappend="${active=='charts'} ? active : inactive" th:href="@{/data/charts}">Charts</a></li>
-        <li style="float:right"><a th:href="@{https://www.blockfabrik.at}">Blockfabrik</a></li>
-    </ul>-->
     <nav th:fragment="header(active)">
         <div id="nav-logo" class="nav-section">
             <a href="#">
@@ -28,7 +21,7 @@
         <div id="nav-link" class="nav-section">
             <a th:href="@{/}">HOME</a>
             <a th:href="@{/data/charts}">STOSSZEITEN</a>
-            <a th:href="@{data/list}">DATEN</a>
+            <a th:href="@{/data/list}">DATEN</a>
         </div>
         <div id="nav-external" class="nav-section">
             <a href="https://www.blockfabrik.at">BLOCKFABRIK</a>
@@ -40,9 +33,6 @@
             <a href="https://www.instagram.com/notsoblackreaper/"><i class="fa-brands fa-instagram"></i><!--<img class="icon" th:src="@{/imgs/icons/instagram.ico}">--></a>
         </div>
     </nav>
-    <!--
-    <img th:src="@{/imgs/blockfabrik_with_name.png}" width="500" style="display: block;margin-left: auto;margin-right: auto;margin-top:10px">
-    -->
 </div>
 </body>
 </html>

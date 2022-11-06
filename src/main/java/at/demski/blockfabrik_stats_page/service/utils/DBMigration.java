@@ -2,19 +2,8 @@ package at.demski.blockfabrik_stats_page.service.utils;
 
 import at.demski.blockfabrik_stats_page.entities.WeatherData;
 import at.demski.blockfabrik_stats_page.service.WeatherAPI;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.*;
 import java.sql.*;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DBMigration {
 
@@ -25,7 +14,7 @@ public class DBMigration {
         System.out.println(WeatherAPI.getCurrentWeather().temperature + "°C");
         ResultSet rs = migration.getDatapoints();
         System.out.println("Got datapoints");
-        migration.migrateData(rs, Date.valueOf("2022-10-31"));
+        migration.migrateData(rs);
     }
 
     public DBMigration() {
@@ -146,7 +135,7 @@ public class DBMigration {
         return 0;
     }
 
-    public void migrateData(ResultSet datapoints_old, Date today) {
+    public void migrateData(ResultSet datapoints_old) {
         try {
             con.rollback();
             int existingData=countTable("blockfabrik_datapoint");
@@ -172,7 +161,7 @@ public class DBMigration {
                 stmt.setInt(4, value);
 
                 stmt.addBatch();
-                if (row % 1000 == 0) {
+                if (row % 5000 == 0) {
                     System.out.println("Inserting rows...");
                     int []res=stmt.executeBatch();
                     int succ= Arrays.stream(res).filter(i -> i!= Statement.EXECUTE_FAILED).toArray().length;

@@ -88,6 +88,7 @@ public class DatabaseConnector {
      */
     public void addCurrentData(VisitorCount count){
         DayData day=dayRepository.getDaybyDate(DateManager.today());
+        System.out.println(day);
         if(day==null)day=addBlankDay();
         BlockfabrikDatapoint datapoint=
                 new BlockfabrikDatapoint(null,day,
