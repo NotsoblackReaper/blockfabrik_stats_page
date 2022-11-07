@@ -20,4 +20,12 @@ public class BlockfabrikDatapoint {
     private int hour;
     private int minute;
     private int value;
+
+    public int compareTime(BlockfabrikDatapoint other){
+        if(other.getHour()>hour)return 1;
+        if(other.getHour()<hour)return -1;
+        if(other.getMinute()>minute)return 1;
+        if(other.getMinute()<minute)return -1;
+        return 0;
+    }
 }

@@ -1,6 +1,8 @@
 package at.demski.blockfabrik_stats_page.controllers;
 
+import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
+import at.demski.blockfabrik_stats_page.entities.DayData;
 import at.demski.blockfabrik_stats_page.service.DatabaseConnector;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
 import org.springframework.stereotype.Controller;
@@ -134,5 +136,31 @@ public class ChartsController {
     public String chartForDay(Model model, @PathVariable("dayNr") int day){
         model.addAttribute("current",day);
         return "data_chart_single";
+    }
+
+    @GetMapping("/data/charts/experimental")
+    public String dataChartsExperimental(Model model) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
+
+
+        String[][] days = new String[7][4];
+        String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
+
+        List<DayData>data=dbConnector.getAllDayData();
+
+        List<List<BlockfabrikDatapoint>> halfHourAverageList = new ArrayList<>();
+        for (int i = 1, day = 1; i <= 7; ++i) {
+            days[day] = getDayData(i, day_names);
+            halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(i));
+            day++;
+        }
+
+        model.addAttribute("data", halfHourAverageList.toArray());
+        model.addAttribute("dayData", days);
+        model.addAttribute("currentTime", currentTime);
+        return "data_charts_exp";
     }
 }

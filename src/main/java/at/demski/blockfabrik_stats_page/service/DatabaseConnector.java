@@ -8,6 +8,7 @@ import at.demski.blockfabrik_stats_page.persistance.BlockfabrikDatapointReposito
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DayDataRepository;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
+import org.springframework.cglib.core.Block;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -157,5 +158,43 @@ public class DatabaseConnector {
         }
 
         return points;
+    }
+
+    public List<BlockfabrikDatapoint> getHalfHourAveragesNew(int day){
+        List<DayData> dayData= dayRepository.getAllForDay(day);
+        DayData root=dayData.get(0);
+
+        float[]weights=new float[dayData.size()];
+        weights[0]=1;
+        float sigmaWeights=0;
+
+        for(int i=1;i<dayData.size();++i){
+            weights[i]=root.getSimilarity(dayData.get(i));
+            sigmaWeights+=weights[i];
+        }
+
+        List<BlockfabrikDatapoint>fiveMinAvg=new ArrayList<>();
+
+        for(int i=0;i<root.getDatapoints().size()-1;++i){
+            BlockfabrikDatapoint rootDatapoint= (BlockfabrikDatapoint) root.getDatapoints().toArray()[i];
+            BlockfabrikDatapoint dummyDatapoint=new BlockfabrikDatapoint();
+            dummyDatapoint.setHour(rootDatapoint.getHour());
+            dummyDatapoint.setMinute(rootDatapoint.getMinute());
+
+            float weightedValues=rootDatapoint.getValue();
+            for(int j=1;j<dayData.size()-1;++j){
+                if(dayData.get(j).getDatapoints().size()<=i)continue;
+                BlockfabrikDatapoint tmp= (BlockfabrikDatapoint) dayData.get(j).getDatapoints().toArray()[i];
+                weightedValues+=tmp.getValue()*weights[j];
+            }
+            dummyDatapoint.setValue(Math.round(weightedValues/sigmaWeights));
+            fiveMinAvg.add(dummyDatapoint);
+        }
+
+        return fiveMinAvg;
+    }
+
+    public List<DayData> getAllDayData(){
+        return dayRepository.getAllDesc();
     }
 }

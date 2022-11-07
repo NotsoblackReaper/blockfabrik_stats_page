@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blockfabrik Stats Page: Data Charts</title>
+    <link rel="icon" th:href="@{/imgs/blockfabrik_icon.png}"/>
+
+    <link rel="stylesheet" th:href="@{/styles/charts.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/chartsWide.css}" media="screen and (min-width: 1101px)"/>
+    <link rel="stylesheet" th:href="@{/styles/chartsSlim.css}" media="screen and (max-width: 1100px)"/>
+
+    <th:block th:replace="fragments/general.html :: styles"></th:block>
+</head>
+<body class="content">
+
+<div th:replace="fragments/general.html :: header(active='charts')"></div>
+<div th:replace="fragments/charts.html :: chart-base()"></div>
+
+<div th:replace="fragments/charts.html :: large-bar-chart(${data[0].toArray()},${dayData[0][2]},${dayData[0][3]},${dayData[0][3]},${currentTime})"></div>
+<main>
+    <article>
+        <div class="article-chart-main article-section">
+            <div th:id="${dayData[0][3]}" class="chart-large"></div>
+            <div id="legend">
+            </div>
+        </div>
+
+        <div class="article-chart-small article-section" th:each="day,iter: ${dayData}" th:unless="${iter.index==0}">
+            <div th:unless="${iter.index==0}" th:replace="fragments/charts.html :: small-bar-chart(${data[iter.index].toArray()},${day[2]},${day[3]},${day[3]},${currentTime})"></div>
+            <div th:unless="${iter.index==0}" th:id="${day[3]}" class="chart-small"></div>
+        </div>
+    </article>
+</main>
+
+<div style="margin-left: auto;margin-right: auto;">
+
+</div>
+</body>
+</html>

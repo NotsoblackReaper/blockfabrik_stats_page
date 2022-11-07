@@ -34,5 +34,4 @@ public class BlockfabrikStatsPageApplication {
                     .web(WebApplicationType.NONE)
                     .run(args);
     }
-
 }

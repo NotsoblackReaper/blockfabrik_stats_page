@@ -106,7 +106,7 @@ public class DBMigration {
     }
 
     public void insertDatapoint(int day, int hour, int minute, int value) {
-        String query = "insert into blockfabrik_datapoint (day, hour, minute, value) values (?,?,?,?)";
+        String query = "insert into blockfabrik_datapoint (day_id, hour, minute, value) values (?,?,?,?)";
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setInt(1, day);
             stmt.setInt(2, hour);
@@ -140,7 +140,7 @@ public class DBMigration {
             con.rollback();
             int existingData=countTable("blockfabrik_datapoint");
             System.out.println(existingData+" existing entries");
-            PreparedStatement stmt = con.prepareStatement("insert into blockfabrik_datapoint (day, hour, minute, value) values (?,?,?,?)");
+            PreparedStatement stmt = con.prepareStatement("insert into blockfabrik_datapoint (day_id, hour, minute, value) values (?,?,?,?)");
             int row = 1;
             while (datapoints_old.next()) {
                 int value = datapoints_old.getInt("datapoint_act");
