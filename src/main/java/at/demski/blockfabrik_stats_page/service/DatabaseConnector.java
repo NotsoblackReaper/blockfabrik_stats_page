@@ -8,7 +8,6 @@ import at.demski.blockfabrik_stats_page.persistance.BlockfabrikDatapointReposito
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DayDataRepository;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
-import org.springframework.cglib.core.Block;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -169,7 +168,7 @@ public class DatabaseConnector {
         float sigmaWeights=0;
 
         for(int i=1;i<dayData.size();++i){
-            weights[i]=root.getSimilarity(dayData.get(i));
+            weights[i]=root.getRelevance(dayData.get(i));
             sigmaWeights+=weights[i];
         }
 

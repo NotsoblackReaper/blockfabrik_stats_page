@@ -69,7 +69,7 @@ public class DayDataSimilarityTest {
                 if(i==j)continue;
                 if (root.getWeekday() != days.get(i).getWeekday()) continue;
                 DayData day = days.get(i);
-                float sim = root.getSimilarity(day);
+                float sim = root.getRelevance(day);
                 //System.out.println("Sim " + sim + " Comparing to:" + day);
 
                 if (sim > maxSim) {

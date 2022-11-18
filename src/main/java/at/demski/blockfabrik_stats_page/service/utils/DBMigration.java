@@ -148,6 +148,12 @@ public class DBMigration {
                 int hour = datapoints_old.getInt("datapoint_hour");
                 int minute = datapoints_old.getInt("datapoint_minute");
 
+
+                if(minute%10==4&&datapoints_old.next()){
+                    value += datapoints_old.getInt("datapoint_act");
+                    value=Math.round(value/2.0f);
+                    ++minute;
+                }
                 if(minute%5!=0)continue;
 
                 int dayId = getDayId(date);

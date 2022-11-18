@@ -14,7 +14,7 @@
 <body class="content">
 
 <div th:replace="fragments/general.html :: header(active='charts')"></div>
-<div th:replace="fragments/charts.html :: chart-base()"></div>
+<div th:replace="fragments/charts.html :: chart-base-exp()"></div>
 
 <div th:replace="fragments/charts.html :: large-bar-chart(${data[0].toArray()},${dayData[0][2]},${dayData[0][3]},${dayData[0][3]},${currentTime})"></div>
 <main>
@@ -25,10 +25,12 @@
             </div>
         </div>
 
+
         <div class="article-chart-small article-section" th:each="day,iter: ${dayData}" th:unless="${iter.index==0}">
             <div th:unless="${iter.index==0}" th:replace="fragments/charts.html :: small-bar-chart(${data[iter.index].toArray()},${day[2]},${day[3]},${day[3]},${currentTime})"></div>
             <div th:unless="${iter.index==0}" th:id="${day[3]}" class="chart-small"></div>
         </div>
+
     </article>
 </main>
 

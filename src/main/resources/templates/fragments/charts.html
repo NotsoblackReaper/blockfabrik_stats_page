@@ -56,7 +56,59 @@
     </script>
 </th:block>
 
-    <script th:fragment="small-bar-chart(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
+<th:block th:fragment="chart-base-exp()">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        let start_draw=0;
+        let duration = 0;
+
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+
+        var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
+
+        function refine_data(raw_data,current_time){
+            console.log(raw_data);
+            const start = performance.now();
+
+            var style='stroke-color: black; stroke-width: 1;opacity: 1;';
+            var refined_data=[];
+            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
+            for(var i=0,array_index=1;i<raw_data.length;i++){
+                var time=String(raw_data[i].hour).padStart(2, '0')+':'+String(raw_data[i].minute).padStart(2, '0')
+                let value=raw_data[i].value;
+                let tmp_style=style;
+                if(current_time!=null){
+                    let curr_min=current_time%100;
+                    if(curr_min<30)curr_min=30;
+                    else curr_min=60;
+                    let curr_hrs=Math.floor(current_time/100);
+                    if(raw_data[i].hour>curr_hrs||raw_data[i].hour===curr_hrs&&raw_data[i].minute>curr_min)
+                        tmp_style='stroke-color: black; stroke-width: 0;opacity: 0.5;';
+                }
+                tmp_style+='color: ';
+                if(value>119)
+                    tmp_style+=colors[3];
+                else if(value>99)
+                    tmp_style+=colors[2];
+                else if(value>39)
+                    tmp_style+=colors[1];
+                else
+                    tmp_style+=colors[0];
+
+                refined_data[i+1]=[time,value,tmp_style];
+            }
+            const duration = performance.now() - start;
+
+            console.log("Refine data duration: "+duration);
+
+            return refined_data;
+        }
+    </script>
+</th:block>
+
+<script th:fragment="small-bar-chart(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
         function [(${methodName})](){
             start_draw = performance.now();
                 /*<![CDATA[*/

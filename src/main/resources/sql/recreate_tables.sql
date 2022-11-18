@@ -1,3 +1,6 @@
+drop table blockfabrik_datapoint;
+drop table day_data;
+
 create table day_data(
                          day_id int auto_increment,
                          date date,
@@ -22,3 +25,5 @@ create table blockfabrik_datapoint(
                                       primary key(datapoint_id),
                                       foreign key (day_id) references day_data(day_id)
 );
+
+commit;

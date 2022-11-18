@@ -59,17 +59,22 @@ public class DayData {
         this.historic = historic;
     }
 
-    public float getSimilarity(DayData other){
+    public float getRelevance(DayData other){
+        /*
         float[]exponentMult={.3f,.35f,.2f};
         float[]weights={.7f,.8f,.3f};
         float exponentOffset=-0.3f;
-        float obsoleteYears=2;
         float minVal=0.1f;
         float offset=0.0f;
+        */
+        float relevantWeeks=2f;
 
         long daysBetween= ChronoUnit.DAYS.between(LocalDate.parse(date.toString()), LocalDate.parse(other.date.toString()));
         int weeksBetween= (int) (daysBetween/7);
-        float outdated=1.0f-weeksBetween*(1f/(52f*obsoleteYears));
+        if(weeksBetween>relevantWeeks)return 0;
+        return 1;
+        /*
+        //float outdated=1.0f-weeksBetween*(1f/(52f*obsoleteYears));
 
         if(other.weekday!=weekday)return 0;
         float similarity=0;
@@ -96,5 +101,6 @@ public class DayData {
         if(similarity<.01f)similarity=.01f;
         if(similarity>1f)similarity=1f;
         return similarity;
+         */
     }
 }

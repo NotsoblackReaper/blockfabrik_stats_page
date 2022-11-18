@@ -149,10 +149,13 @@ public class ChartsController {
         String[][] days = new String[7][4];
         String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
-        List<DayData>data=dbConnector.getAllDayData();
-
         List<List<BlockfabrikDatapoint>> halfHourAverageList = new ArrayList<>();
+
+        halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(currentDay));
+        days[0] = getDayData(currentDay, day_names);
         for (int i = 1, day = 1; i <= 7; ++i) {
+            if (i == currentDay)
+                continue;
             days[day] = getDayData(i, day_names);
             halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(i));
             day++;
