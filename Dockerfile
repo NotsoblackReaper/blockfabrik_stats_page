@@ -4,7 +4,9 @@ COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM gcr.io/distroless/java  
-COPY --from=build /usr/src/app/target/blockfabrik_stats_page-0.1.jar /usr/app/blockfabrik_stats_page-0.1.jar
+COPY --from=build /usr/src/app/target/blockfabrik_stats_page-0.2.jar /usr/app/blockfabrik_stats_page-0.2.jar
 ENV TZ="Europe/Vienna"
+ENV DATA_SCRAPING=${data_scraping}
+ENV WEB_SERVER=${web_server}
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/app/blockfabrik_stats_page-0.1.jar"]
+ENTRYPOINT ["java","-jar","/usr/app/blockfabrik_stats_page-0.2.jar"]
