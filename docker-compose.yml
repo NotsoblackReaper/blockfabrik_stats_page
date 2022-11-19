@@ -2,7 +2,6 @@ version: "3.9"
 services:
   web:
     build:
-      dockerfile: ./Dockerfile
       args:
         - data_scraping=${data_scraping}
         - web_server=${web_server}
