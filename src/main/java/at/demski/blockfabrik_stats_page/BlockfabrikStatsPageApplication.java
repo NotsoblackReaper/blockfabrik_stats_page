@@ -22,6 +22,7 @@ public class BlockfabrikStatsPageApplication {
             web_server = Boolean.parseBoolean(webSv_str);
 
         System.out.println("---------------------------------------------");
+        System.out.println("BlockfabrikStatsPageApplication version 0.2");
         System.out.println("Starting with Configuration:");
         System.out.println("Data Scraping: "+data_scraping);
         System.out.println("Web Server:    "+web_server);

@@ -22,6 +22,7 @@ public class ModelHandler {
     }
 
     public void loadModel(String type,String name,int version){
+        System.out.println("Creating Model Handler");
         try {
             model=SavedModelBundle.load("./tf-models/"+type+"/"+name+"/"+version+"/", "serve");
         }
