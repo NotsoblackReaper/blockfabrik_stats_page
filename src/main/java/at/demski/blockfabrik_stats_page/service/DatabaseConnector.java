@@ -7,6 +7,7 @@ import at.demski.blockfabrik_stats_page.entities.WeatherData;
 import at.demski.blockfabrik_stats_page.persistance.BlockfabrikDatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DayDataRepository;
+import at.demski.blockfabrik_stats_page.service.utils.DatapointUtils;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
 import org.springframework.stereotype.Component;
 
@@ -159,7 +160,7 @@ public class DatabaseConnector {
         return points;
     }
 
-    public List<BlockfabrikDatapoint> getHalfHourAveragesNew(int day){
+    public List<BlockfabrikDatapoint> getHalfHourAveragesNew(int day,int averageLength){
         List<DayData> dayData= dayRepository.getAllForDay(day);
         DayData root=dayData.get(0);
 
@@ -190,10 +191,14 @@ public class DatabaseConnector {
             fiveMinAvg.add(dummyDatapoint);
         }
 
-        return fiveMinAvg;
+        return DatapointUtils.averageDayValues(fiveMinAvg,20);
     }
 
     public List<DayData> getAllDayData(){
         return dayRepository.getAllDesc();
+    }
+
+    public List<BlockfabrikDatapoint> getValuesForDay(Date date, int hour,int minute){
+        return datapointRepository.getBeforeTime(date,hour,minute);
     }
 }

@@ -23,6 +23,7 @@ public class ChartsController {
     public ChartsController(DatabaseConnector dbConnector) {
         this.dbConnector = dbConnector;
     }
+    String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
     private String[] getDayData(int i, String[] day_names) {
         String[] res = new String[4];
@@ -45,11 +46,10 @@ public class ChartsController {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
+        int currentTime = 2400;
 
 
         String[][] days = new String[7][4];
-        String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
         List<List<Datapoint>> rawlist = new ArrayList<>();
         List<List<Datapoint>> medianList = new ArrayList<>();
@@ -116,7 +116,6 @@ public class ChartsController {
         int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
 
         String[] days;
-        String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
         days = getDayData(currentDay, day_names);
 
         List<Datapoint> halfHourAverageList = dbConnector.getHalfHourAverages(currentDay);
@@ -143,21 +142,19 @@ public class ChartsController {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        int currentTime = c.get(Calendar.HOUR_OF_DAY) * 100 + c.get(Calendar.MINUTE);
-
+        int currentTime = 2400;
 
         String[][] days = new String[7][4];
-        String[] day_names = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
 
         List<List<BlockfabrikDatapoint>> halfHourAverageList = new ArrayList<>();
 
-        halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(currentDay));
+        halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(currentDay,20));
         days[0] = getDayData(currentDay, day_names);
         for (int i = 1, day = 1; i <= 7; ++i) {
             if (i == currentDay)
                 continue;
             days[day] = getDayData(i, day_names);
-            halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(i));
+            halfHourAverageList.add(dbConnector.getHalfHourAveragesNew(i,20));
             day++;
         }
 

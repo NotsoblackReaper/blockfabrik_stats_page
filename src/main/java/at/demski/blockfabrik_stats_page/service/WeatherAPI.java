@@ -69,7 +69,7 @@ public class WeatherAPI {
             pattern=Pattern.compile(regexWind);
             matcher=pattern.matcher(content);
             if(matcher.find())
-                wind=Float.parseFloat(matcher.group(3).replace(',', '.'))*3.6f;
+                wind=Float.parseFloat(matcher.group(3).replace(',', '.'))/3.6f;
             pattern=Pattern.compile(regexRain);
             matcher=pattern.matcher(content);
             if(matcher.find())

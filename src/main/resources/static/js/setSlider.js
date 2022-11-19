@@ -28,28 +28,38 @@ let customers = document.getElementById('customers');
 
 let counter=-1;
 let maxcount=-1;
+const date = new Date();
+let timeVal=date.getHours()*100+date.getMinutes();
+if(timeVal>=730&&timeVal<=2200){
+    fetch(url)
+        .then(res => res.json())
+        .then((out) => {
 
-fetch(url)
-.then(res => res.json())
-.then((out) => {
+            data = JSON.stringify(out, null, 4);
+            let obj = JSON.parse(data);
 
-data = JSON.stringify(out, null, 4);
-let obj = JSON.parse(data);
+            counter = obj.counter;
+            maxcount = obj.maxcount;
 
-counter = obj.counter;
-maxcount = obj.maxcount;
-
-customers.innerText=counter;
+            customers.innerText=counter;
 //free.innerText=maxcount-counter;
 
-let percent = ((counter / maxcount) * 100);
-if (percent > 105)
-    percent = 100;
-let percentile = percent + "%";
+            let percent = ((counter / maxcount) * 100);
+            if (percent > 105)
+                percent = 100;
+            let percentile = percent + "%";
 
-if(window.matchMedia("(min-width: 1101px)").matches)
-document.getElementById("slider-fill").style.height = percentile;
-else
-    document.getElementById("slider-fill").style.width = percentile;
-document.getElementById("slider-label").innerText = Math.round(percent)+'%';
-}).catch(err => { throw err });
+            if(window.matchMedia("(min-width: 1101px)").matches)
+                document.getElementById("slider-fill").style.height = percentile;
+            else
+                document.getElementById("slider-fill").style.width = percentile;
+            document.getElementById("slider-label").innerText = Math.round(percent)+'%';
+        }).catch(err => { throw err });
+}else{
+    customers.innerText='0';
+    if(window.matchMedia("(min-width: 1101px)").matches)
+        document.getElementById("slider-fill").style.height = '0%';
+    else
+        document.getElementById("slider-fill").style.width = '0%';
+    document.getElementById("slider-label").innerText ='0%';
+}

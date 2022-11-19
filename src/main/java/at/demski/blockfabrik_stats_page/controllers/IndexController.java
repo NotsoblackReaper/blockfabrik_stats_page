@@ -21,8 +21,6 @@ public class IndexController {
         this.dbConnector = dbConnector;
     }
 
-
-
     @GetMapping("/")
     public String homeChart(Model model, @RequestParam(value = "day", required=false) Integer day){
         if(day==null)day=DateManager.day()-1;

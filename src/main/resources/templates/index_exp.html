@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockfabrik Stats Page</title>
+    <link rel="icon" th:href="@{/imgs/blockfabrik_icon.png}"/>
+
+    <link rel="stylesheet" th:href="@{/styles/index.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/indexWide.css}" media="screen and (min-width: 1101px)"/>
+    <link rel="stylesheet" th:href="@{/styles/indexSlim.css}" media="screen and (max-width: 1100px)"/>
+
+    <th:block th:replace="fragments/general.html :: styles"></th:block>
+
+
+    <div th:replace="fragments/charts.html :: chart-base-exp()"></div>
+
+    <script th:inline="javascript" type="text/javascript">
+        function drawChart() {
+            start_draw = performance.now();
+            /*<![CDATA[*/
+            var raw_data = /*[[${data}]]*/ ['error'];
+            var dayName = /*[[${dayName}]]*/ 'error';
+            var currentTime = /*[[${currentTime}]]*/ 'error';
+            /*]]>*/
+            var divName = 'indexChart';
+            if (raw_data.length > 0) {
+                var refined_data = refine_data(raw_data,currentTime);
+                var data = google.visualization.arrayToDataTable(refined_data);
+                var options = {
+                    isStacked: false,
+                    title: 'Besucher ' + dayName,
+                    vAxis: {viewWindow:{min: 0,max: 180},gridlines:{count:5,interval:[2,4]}},
+                    hAxis: { },
+                    legend: {position: 'none'},
+                    backgroundColor: {fill: 'transparent',},
+                    bar: {groupWidth: "100%"},
+                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
+                };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById(divName));
+                chart.draw(data, options);
+                duration = performance.now() - start_draw;
+                console.log("Draw chart Duration: "+duration);
+            }
+        }
+
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
+</head>
+<body>
+
+<nav th:replace="fragments/general.html :: header(active='home')"></nav>
+
+<main>
+    <article>
+        <div class="article-chart article-section">
+            <div id="indexChart" class=""></div>
+        </div>
+        <div class="article-status article-section"
+             th:style="'background-image: url(' + @{/imgs/fahrraeder.jpg} + ');background-size:cover;'">
+            <div id="slider-background">
+                <div id="slider-fill">
+                    <p id="slider-label">50%</p>
+                    <div id="slider-marker"></div>
+                </div>
+            </div>
+            <div id="status-description">
+                <p>AKTUELLE BESUCHER</p>
+                    <span id="customers">50</span>
+            </div>
+            <script th:src="@{/js/setSlider.js}"></script>
+        </div>
+        <div class="article-content article-section">
+            <!-- ############################################# -->
+            <!-- Uncomment next tag to test embedding a chart! -->
+            <!-- ############################################# -->
+            <!--<iframe width="100%" height="100%" src="https://block2.demski.at/data/charts/today" title="Test" allow=""></iframe>-->
+        </div>
+        <div class="article-nav article-section">
+            <a class="article-nav-button nav-button-left" th:href="@{'/experimental?day='+${((current+6)%7)}}">
+                <img th:src="@{/imgs/chevrons.ico}"></a>
+            </a>
+            <a class="article-nav-button nav-button-right" th:href="@{'/experimental?day='+${(current+1)%7}}">
+                <img th:src="@{/imgs/chevrons.ico}"></a>
+            </a>
+        </div>
+
+        <div class="article-weather article-section">
+            <!--<p><i class="fa-solid fa-temperature-three-quarters"></i> <span>50</span> °C</p>
+            <p><i class="fa-solid fa-wind"></i> <span>50</span> m/s</p>
+            <p><i class="fa-solid fa-cloud-showers-heavy"></i> <span>50</span> mm/h</p>-->
+
+        </div>
+    </article>
+</main>
+</body>
+</html>

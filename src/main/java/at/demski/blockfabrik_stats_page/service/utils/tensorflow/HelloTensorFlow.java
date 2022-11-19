@@ -31,20 +31,12 @@ public class HelloTensorFlow {
         System.out.println("Hello TensorFlow " + TensorFlow.version());
         float []data= {4.0f,-2.1f,0.0f,4.5f,9.0f,30.0f,29.0f,28.0f,27.0f};//target= 29.278
         try (SavedModelBundle savedModelBundle = SavedModelBundle.load("./tf-models/complex/model1/1/", "serve")) {
-
-            System.out.println("Operations: ");
-            var it=savedModelBundle.graph().operations();
-            Operation o;
-            while((o=it.next())!=null){
-                System.out.println(o+"\nName: "+o.name()+"\n#-Outputs: "+o.numOutputs()+"\nType: "+o.type()+"\n");
-            }
-
             Map<String,Tensor> inArgs=new HashMap<>();
             inArgs.put("normalization_input",TFloat32.tensorOf(NdArrays.vectorOf(data)));
 
             var out=savedModelBundle.call(inArgs).get("dense_17");
             float res=((TFloat32)out).getFloat();
-
+            System.out.println(res);
         } catch (TensorFlowException ex) {
             ex.printStackTrace();
         }
