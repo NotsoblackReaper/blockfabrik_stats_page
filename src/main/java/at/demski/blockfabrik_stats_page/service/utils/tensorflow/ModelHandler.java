@@ -1,5 +1,6 @@
 package at.demski.blockfabrik_stats_page.service.utils.tensorflow;
 
+import at.demski.blockfabrik_stats_page.BlockfabrikStatsPageApplication;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.tensorflow.SavedModelBundle;
@@ -23,6 +24,7 @@ public class ModelHandler {
     final int DEFAULT_VERSION=1;
 
     public ModelHandler(){
+        if(BlockfabrikStatsPageApplication.tf_support)
         loadModel(DEFAULT_TYPE,DEFAULT_NAME,DEFAULT_VERSION);
     }
 
@@ -40,6 +42,7 @@ public class ModelHandler {
     }
 
     public float predict(int weekday,float temp, float rain, float wind,int hour,int minute,int	hisVal5min,int	hisVal10min,int	hisVal15min){
+        if(!BlockfabrikStatsPageApplication.tf_support)return 0;
         float []data={weekday,temp,rain,wind,hour,minute,hisVal5min,hisVal10min,hisVal15min};
         float prediction=predict(data)[0];
         System.out.println("Values:\n["+weekday+", "+temp+", "+rain+", "+wind+", "+hour+", "+minute+", "+hisVal5min+", "+hisVal10min+", "+hisVal15min+"]\nPrediction: "+prediction);

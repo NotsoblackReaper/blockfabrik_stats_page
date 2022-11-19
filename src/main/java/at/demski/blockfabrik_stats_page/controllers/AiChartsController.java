@@ -1,5 +1,6 @@
 package at.demski.blockfabrik_stats_page.controllers;
 
+import at.demski.blockfabrik_stats_page.BlockfabrikStatsPageApplication;
 import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.WeatherData;
 import at.demski.blockfabrik_stats_page.service.DatabaseConnector;
@@ -76,7 +77,7 @@ public class AiChartsController {
         model.addAttribute("currentTime", currentTime);
 
         //If the selected day is the current day, show predicted values, otherwise show averages
-        if(DateManager.day()-1==day){
+        if(BlockfabrikStatsPageApplication.tf_support&&DateManager.day()-1==day){
             model.addAttribute("data", getPrediction(hour,20));
         }else{
             model.addAttribute("data", dbConnector.getHalfHourAveragesNew(day+1,20));

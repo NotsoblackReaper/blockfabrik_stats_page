@@ -11,9 +11,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class BlockfabrikStatsPageApplication {
 
     public static boolean data_scraping = false;
+    public static boolean tf_support=false;
 
     public static void main(String[] args) {
         boolean web_server = true;
+        String tf_str = System.getenv("TF_SUPPORT");
+        if (tf_str != null)
+            tf_support = Boolean.parseBoolean(tf_str);
         String scrape_str = System.getenv("DATA_SCRAPING");
         if (scrape_str != null)
             data_scraping = Boolean.parseBoolean(scrape_str);
@@ -26,6 +30,7 @@ public class BlockfabrikStatsPageApplication {
         System.out.println("Starting with Configuration:");
         System.out.println("Data Scraping: "+data_scraping);
         System.out.println("Web Server:    "+web_server);
+        System.out.println("Tensorflow:    "+tf_support);
         System.out.println("---------------------------------------------");
 
         if (web_server)
