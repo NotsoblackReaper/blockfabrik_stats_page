@@ -10,9 +10,9 @@
     </parent>
     <groupId>at.demski</groupId>
     <artifactId>blockfabrik_stats_page</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <name>blockfabrik_stats_page</name>
-    <description>blockfabrik_stats_page</description>
+    <description>Blockfabrik Stats Page, supporting Tensorflow prediction.</description>
     <properties>
         <java.version>11</java.version>
     </properties>
