@@ -1,12 +1,17 @@
 package at.demski.blockfabrik_stats_page.service.utils.tensorflow;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
-import org.tensorflow.TensorFlow;
 import org.tensorflow.exceptions.TensorFlowException;
 import org.tensorflow.ndarray.NdArrays;
 import org.tensorflow.types.TFloat32;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +29,11 @@ public class ModelHandler {
     public void loadModel(String type,String name,int version){
         System.out.println("Creating Model Handler");
         try {
-            model=SavedModelBundle.load("./tf-models/"+type+"/"+name+"/"+version+"/", "serve");
+            Resource resource = new ClassPathResource("/tf-models/"+type+"/"+name+"/"+version+"/");
+            System.out.println(resource.getFile().getPath());
+            model=SavedModelBundle.load(resource.getFile().getPath(), "serve");
         }
-        catch (TensorFlowException ex) {
+        catch (TensorFlowException | IOException ex) {
             ex.printStackTrace();
         }
     }
