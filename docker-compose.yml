@@ -1,6 +1,8 @@
 version: "3.9"
 services:
   web:
+    image: statspage-image
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile
