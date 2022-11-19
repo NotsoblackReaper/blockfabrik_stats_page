@@ -28,6 +28,7 @@ public class ModelHandler {
 
     public void loadModel(String type,String name,int version){
         System.out.println("Creating Model Handler");
+        System.out.println("Using CPU");
         try {
             Resource resource = new ClassPathResource("/tf-models/"+type+"/"+name+"/"+version+"/");
             System.out.println(resource.getFile().getPath());
