@@ -1,4 +1,4 @@
-package at.demski.blockfabrik_stats_page.security;
+package at.demski.blockfabrik_stats_page.service.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

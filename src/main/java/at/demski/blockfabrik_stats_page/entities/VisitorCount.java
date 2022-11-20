@@ -1,6 +1,6 @@
-package at.demski.blockfabrik_stats_page.service;
+package at.demski.blockfabrik_stats_page.entities;
 
-public class VisitorCount {
+public class VisitorCount  {
     private int counter;
     private int maxcount;
 

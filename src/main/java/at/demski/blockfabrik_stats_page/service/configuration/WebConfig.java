@@ -1,4 +1,4 @@
-package at.demski.blockfabrik_stats_page.service;
+package at.demski.blockfabrik_stats_page.service.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;

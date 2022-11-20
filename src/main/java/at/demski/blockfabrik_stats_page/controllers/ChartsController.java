@@ -2,8 +2,7 @@ package at.demski.blockfabrik_stats_page.controllers;
 
 import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
-import at.demski.blockfabrik_stats_page.entities.DayData;
-import at.demski.blockfabrik_stats_page.service.DatabaseConnector;
+import at.demski.blockfabrik_stats_page.service.API.DatabaseConnector;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

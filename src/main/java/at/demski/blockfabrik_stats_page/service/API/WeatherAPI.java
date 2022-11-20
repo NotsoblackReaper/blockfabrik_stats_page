@@ -1,4 +1,4 @@
-package at.demski.blockfabrik_stats_page.service;
+package at.demski.blockfabrik_stats_page.service.API;
 
 import at.demski.blockfabrik_stats_page.entities.WeatherData;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;

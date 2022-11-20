@@ -1,4 +1,4 @@
-package at.demski.blockfabrik_stats_page.service.utils.tensorflow;
+package at.demski.blockfabrik_stats_page.utils;
 
 import java.io.File;
 import java.io.FileWriter;

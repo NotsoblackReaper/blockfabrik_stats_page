@@ -1,4 +1,4 @@
-package at.demski.blockfabrik_stats_page.service;
+package at.demski.blockfabrik_stats_page.service.API;
 
 import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
@@ -7,8 +7,11 @@ import at.demski.blockfabrik_stats_page.entities.WeatherData;
 import at.demski.blockfabrik_stats_page.persistance.BlockfabrikDatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DatapointRepository;
 import at.demski.blockfabrik_stats_page.persistance.DayDataRepository;
+import at.demski.blockfabrik_stats_page.entities.VisitorCount;
 import at.demski.blockfabrik_stats_page.service.utils.DatapointUtils;
 import at.demski.blockfabrik_stats_page.service.utils.DateManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class DatabaseConnector {
+
+    Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
 
     private static <T> Predicate<T> distinctByKeys(Function<? super T, ?>... keyExtractors)
     {
@@ -41,11 +46,10 @@ public class DatabaseConnector {
     final DayDataRepository dayRepository;
 
     public DatabaseConnector(DatapointRepository repository, BlockfabrikDatapointRepository datapointRepository,DayDataRepository dayRepository) {
-        System.out.println("Creating DB Connector");
+        logger.info("Creating DB Connector");
         this.repository = repository;
         this.datapointRepository=datapointRepository;
         this.dayRepository=dayRepository;
-        System.out.println("Created DB Connector");
     }
 
     /***
@@ -75,10 +79,10 @@ public class DatabaseConnector {
     }
 
     public DayData addBlankDay(){
-        WeatherData current=WeatherAPI.getCurrentWeather();
+        WeatherData current= WeatherAPI.getCurrentWeather();
         DayData data=new DayData(DateManager.today(),current.temperature,current.downpour,current.wind,false,null,false);
         DayData inserted=dayRepository.save(data);
-        System.out.println("Adding new Day with id "+inserted);
+        logger.info("Adding new Day with id "+inserted+"\n"+data);
         return inserted;
     }
 
@@ -89,7 +93,6 @@ public class DatabaseConnector {
      */
     public void addCurrentData(VisitorCount count){
         DayData day=dayRepository.getDaybyDate(DateManager.today());
-        System.out.println(day);
         if(day==null)day=addBlankDay();
         BlockfabrikDatapoint datapoint=
                 new BlockfabrikDatapoint(null,day,
@@ -100,7 +103,7 @@ public class DatabaseConnector {
         if(datapoint.getHour()>=22)
             return;
 
-        System.out.println("Inserting Datapoint:\n"+datapoint);
+        logger.info("Inserting Datapoint:\n"+datapoint);
         datapointRepository.save(datapoint);
     }
 

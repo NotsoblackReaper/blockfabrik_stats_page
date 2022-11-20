@@ -1,7 +1,9 @@
-package at.demski.blockfabrik_stats_page.service.utils;
+package at.demski.blockfabrik_stats_page.utils;
 
 import at.demski.blockfabrik_stats_page.entities.WeatherData;
-import at.demski.blockfabrik_stats_page.service.WeatherAPI;
+import at.demski.blockfabrik_stats_page.service.API.WeatherAPI;
+import at.demski.blockfabrik_stats_page.service.utils.DateManager;
+
 import java.sql.*;
 import java.util.Arrays;
 

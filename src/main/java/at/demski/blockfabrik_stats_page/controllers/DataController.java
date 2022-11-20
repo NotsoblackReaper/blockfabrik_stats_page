@@ -2,8 +2,11 @@ package at.demski.blockfabrik_stats_page.controllers;
 
 import at.demski.blockfabrik_stats_page.BlockfabrikStatsPageApplication;
 import at.demski.blockfabrik_stats_page.entities.DayData;
-import at.demski.blockfabrik_stats_page.service.DatabaseConnector;
+import at.demski.blockfabrik_stats_page.service.API.DatabaseConnector;
 
+import at.demski.blockfabrik_stats_page.service.utils.tensorflow.ModelHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +24,6 @@ public class DataController {
     @GetMapping("/data/list")
     public String dataList(Model model) {
         List<DayData>data=dbConnector.getDayDataDesc(50);
-        System.out.println("Accessing Data list: ");
-        System.out.println("Got "+data.size()+" entries");
         model.addAttribute("dayList", data);
         model.addAttribute("data_scraping", BlockfabrikStatsPageApplication.data_scraping);
         return "data_list";

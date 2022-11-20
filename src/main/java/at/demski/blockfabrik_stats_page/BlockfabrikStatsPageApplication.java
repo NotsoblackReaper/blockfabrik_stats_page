@@ -1,5 +1,8 @@
 package at.demski.blockfabrik_stats_page;
 
+import at.demski.blockfabrik_stats_page.service.utils.tensorflow.ModelHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class BlockfabrikStatsPageApplication {
+    private static Logger logger = LoggerFactory.getLogger(BlockfabrikStatsPageApplication.class);
 
     public static boolean data_scraping = false;
     public static boolean tf_support=false;
@@ -25,13 +29,13 @@ public class BlockfabrikStatsPageApplication {
         if (webSv_str != null)
             web_server = Boolean.parseBoolean(webSv_str);
 
-        System.out.println("---------------------------------------------");
-        System.out.println("BlockfabrikStatsPageApplication version 0.2");
-        System.out.println("Starting with Configuration:");
-        System.out.println("Data Scraping: "+data_scraping);
-        System.out.println("Web Server:    "+web_server);
-        System.out.println("Tensorflow:    "+tf_support);
-        System.out.println("---------------------------------------------");
+        logger.info("\n---------------------------------------------\n"+
+                "BlockfabrikStatsPageApplication version 0.2\n"+
+                "Starting with Configuration:\n"+
+                "Data Scraping: "+data_scraping+"\n"+
+                "Web Server:    "+web_server+"\n"+
+                "Tensorflow:    "+tf_support+"\n"+
+                "---------------------------------------------");
 
         if (web_server)
             SpringApplication.run(BlockfabrikStatsPageApplication.class, args);
