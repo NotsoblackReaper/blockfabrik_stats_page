@@ -3,50 +3,78 @@
   <head>
     <title>Blockfabrik Stats Page: Data Table</title>
       <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
-      <link rel="stylesheet" th:href="@{/styles/tables.css}"/>
     <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/datepicker.css}"/>
+
+    <link rel="stylesheet" th:href="@{/styles/widescreen/dataWide.css}" media="screen and (min-width: 1101px)"/>
+    <link rel="stylesheet" th:href="@{/styles/slim/dataSlim.css}" media="screen and (max-width: 1100px)"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
     <th:block th:replace="fragments/general.html :: styles"></th:block>
   </head>
   <body class="content">
 
   <div th:replace="fragments/general.html :: header(active='data')"></div>
-  <div id="data-scraping-status">
-      <div class="label">
-        <span>Daten Sammeln</span>
+  <main>
+    <article>
+      <div class="article-day-list article-section">
+        <table id="day-list">
+          <thead>
+          <tr>
+            <th style="text-align: left;padding-left: 20px;"> Date </th>
+            <th style="text-align: center"> Weekday </th>
+            <th style="text-align: center"> °C </th>
+            <th style="text-align: center"> Rain </th>
+            <th style="text-align: right;padding-right: 20px;"> Wind </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="day : ${dayList}">
+            <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
+            <td style="text-align: left;padding-left: 20px;"><span th:text="${day.getDate()}"> Date </span></td>
+            <td style="text-align: center"><span th:text="${day.getWeekday()}"> Time </span></td>
+            <td style="text-align: center"><span th:text="${day.getTemp()}+'°C'"> Time </span></td>
+            <td style="text-align: center"><span th:text="${day.getRain()}+'mm'"> Time </span></td>
+            <td style="text-align: center"><span th:text="${day.getWind()}+'m/s'"> Time </span></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="value">
-        <span th:if="${data_scraping}">Aktiviert</span>
-        <span th:unless="${data_scraping}">Deaktiviert</span>
+      <div class="article-day-chart article-section">
+        chart
       </div>
-    </div>
-  <div>
-    <div>
-      <table id="day-list">
-        <thead>
-        <tr>
-          <th style="text-align: left;padding-left: 20px;"> Date </th>
-          <th style="text-align: center"> Weekday </th>
-          <th style="text-align: center"> °C </th>
-          <th style="text-align: center"> Rain </th>
-          <th style="text-align: right;padding-right: 20px;"> Wind </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="day : ${dayList}">
-          <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
-          <td style="text-align: left;padding-left: 20px;"><span th:text="${day.getDate()}"> Date </span></td>
-          <td style="text-align: center"><span th:text="${day.getWeekday()}"> Time </span></td>
-          <td style="text-align: center"><span th:text="${day.getTemp()}+'°C'"> Time </span></td>
-          <td style="text-align: center"><span th:text="${day.getRain()}+'mm'"> Time </span></td>
-          <td style="text-align: center"><span th:text="${day.getWind()}+'m/s'"> Time </span></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <!--List datapoints-->
+      <div class="article-day-select article-section">
+        calendar
+        <div id="datepicker">
 
-    </div>
-  </div>
+        </div>
+        <script type="text/javascript">
+          $("#datepicker").datepicker({
+            onSelect: function(dateText) {
+              console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+            },
+            beforeShowDay: function(date){
+              let string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+              //return [ array.indexOf(string) == -1 ]
+              return [true];
+            }
+          });
+        </script>
+      </div>
+      <div class="article-data-scraping article-section">
+        <div id="data-scraping-status">
+          <div class="label">
+            <span>Daten Sammeln</span>
+          </div>
+          <div class="value">
+            <span th:if="${data_scraping}">Aktiviert</span>
+            <span th:unless="${data_scraping}">Deaktiviert</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
   </body>
 </html>

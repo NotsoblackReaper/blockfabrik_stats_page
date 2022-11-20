@@ -1,0 +1,11 @@
+main > article{
+    display:grid;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.article-day-list{
+    grid-column: 1/2;
+    grid-row:1/4;
+}

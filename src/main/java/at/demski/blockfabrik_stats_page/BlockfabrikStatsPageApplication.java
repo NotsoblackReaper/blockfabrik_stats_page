@@ -32,9 +32,9 @@ public class BlockfabrikStatsPageApplication {
         logger.info("\n---------------------------------------------\n"+
                 "BlockfabrikStatsPageApplication version 0.2\n"+
                 "Starting with Configuration:\n"+
-                "Data Scraping: "+data_scraping+"\n"+
-                "Web Server:    "+web_server+"\n"+
-                "Tensorflow:    "+tf_support+"\n"+
+                "Data Scraping: "+data_scraping+(scrape_str==null?"(default)\n":"\n")+
+                "Web Server:    "+web_server+(webSv_str==null?"(default)\n":"\n")+
+                "Tensorflow:    "+tf_support+(tf_str==null?"(default)\n":"\n")+
                 "---------------------------------------------");
 
         if (web_server)

@@ -23,7 +23,7 @@ public class DataController {
 
     @GetMapping("/data/list")
     public String dataList(Model model) {
-        List<DayData>data=dbConnector.getDayDataDesc(50);
+        List<DayData>data=dbConnector.getDayDataDesc(7*4);
         model.addAttribute("dayList", data);
         model.addAttribute("data_scraping", BlockfabrikStatsPageApplication.data_scraping);
         return "data_list";
