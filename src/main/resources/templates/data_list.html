@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Blockfabrik Stats Page: Data Table</title>
-      <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
+    <link rel="icon" th:href="@{/imgs/blockfabrik_icon_large.png}"/>
     <link rel="stylesheet" th:href="@{/styles/visitorcount.css}"/>
     <link rel="stylesheet" th:href="@{/styles/datepicker.css}"/>
 
@@ -11,70 +11,162 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
 
     <th:block th:replace="fragments/general.html :: styles"></th:block>
-  </head>
-  <body class="content">
+</head>
+<body class="content">
 
-  <div th:replace="fragments/general.html :: header(active='data')"></div>
-  <main>
+<div th:replace="fragments/general.html :: header(active='data')"></div>
+<main>
     <article>
-      <div class="article-day-list article-section">
-        <table id="day-list">
-          <thead>
-          <tr>
-            <th style="text-align: left;padding-left: 20px;"> Date </th>
-            <th style="text-align: center"> Weekday </th>
-            <th style="text-align: center"> °C </th>
-            <th style="text-align: center"> Rain </th>
-            <th style="text-align: right;padding-right: 20px;"> Wind </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="day : ${dayList}">
-            <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
-            <td style="text-align: left;padding-left: 20px;"><span th:text="${day.getDate()}"> Date </span></td>
-            <td style="text-align: center"><span th:text="${day.getWeekday()}"> Time </span></td>
-            <td style="text-align: center"><span th:text="${day.getTemp()}+'°C'"> Time </span></td>
-            <td style="text-align: center"><span th:text="${day.getRain()}+'mm'"> Time </span></td>
-            <td style="text-align: center"><span th:text="${day.getWind()}+'m/s'"> Time </span></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="article-day-chart article-section">
-        chart
-      </div>
-      <div class="article-day-select article-section">
-        calendar
-        <div id="datepicker">
+        <div class="article-day-list article-section">
+            <table id="day-list">
+                <thead>
+                <tr>
+                    <th style="text-align: left;padding-left: 20px;"> Date</th>
+                    <th style="text-align: center"> Weekday</th>
+                    <th style="text-align: center"> °C</th>
+                    <th style="text-align: center"> Rain</th>
+                    <th style="text-align: right;padding-right: 20px;"> Wind</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="day : ${dayList}">
+                    <!--/*@thymesVar id="entry" type="at.demski.blockfabrik_stats_page.entities.Datapoint"*/-->
+                    <td style="text-align: left;padding-left: 20px;"><span th:text="${day.getDate()}"> Date </span></td>
+                    <td style="text-align: center"><span th:text="${day.getWeekday()}"> Time </span></td>
+                    <td style="text-align: center"><span th:text="${day.getTemp()}+'°C'"> Time </span></td>
+                    <td style="text-align: center"><span th:text="${day.getRain()}+'mm'"> Time </span></td>
+                    <td style="text-align: center"><span th:text="${day.getWind()}+'m/s'"> Time </span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="chart-container" class="article-day-chart article-section">
+            chart
+            <div id="chart-div"></div>
+            <script th:inline="javascript" type="text/javascript">
+                var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
+                var dataArray = /*[[${datapoints}]]*/ ['error'];
+            </script>
 
+            <script th:inline="javascript" type="text/javascript">
+                // set the dimensions and margins of the graph
+                let container=document.getElementById("chart-container");
+                var margin = {top: 30, right: 30, bottom: 40, left: 50},
+                    width = container.offsetWidth - margin.left - margin.right,
+                    height = container.offsetHeight - margin.top - margin.bottom;
+
+                // append the svg object to the body of the page
+                var svg = d3.select("#chart-div")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+                // Parse the Data
+                function draw(data) {
+
+// X axis
+                    var x = d3.scaleBand()
+                        .range([0, width])
+                        .domain(data.map(function (d) {
+                            return d.hour+':'+d.minute;
+                        }))
+                        .padding(0);
+                    svg.append("g")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(d3.axisBottom(x))
+                        .selectAll("text")
+                        .attr("transform", "translate(-10,0)rotate(-45)")
+                        .style("text-anchor", "end");
+
+// Add Y axis
+                    let maxVal=Math.max.apply(Math, dataArray.map(function(o) { return o.value; }))
+                    if(maxVal<160)maxVal=160;
+
+                    var y = d3.scaleLinear()
+                        .domain([0, maxVal])
+                        .range([height, 0]);
+                    svg.append("g")
+                        .call(d3.axisLeft(y));
+
+// Bars
+                    svg.selectAll("mybar")
+                        .data(data)
+                        .enter()
+                        .append("rect")
+                        .attr("x", function (d) {
+                            return x(d.hour+':'+d.minute);
+                        })
+                        .attr("y", function (d) {
+                            return y(d.value);
+                        })
+                        .attr("width", x.bandwidth())
+                        .attr("height", function (d) {
+                            return height - y(d.value);
+                        })
+                        .attr("fill",function (d){
+                            if(d.value>119)
+                                return colors[3];
+                            else if(d.value>99)
+                                return colors[2];
+                            else if(d.value>39)
+                                return colors[1];
+                            else
+                                return colors[0];
+                        })
+                        //.attr("style","outline: thin solid black;")
+
+                };
+                draw(dataArray);
+            </script>
         </div>
-        <script type="text/javascript">
-          $("#datepicker").datepicker({
-            onSelect: function(dateText) {
-              console.log("Selected date: " + dateText + "; input's current value: " + this.value);
-            },
-            beforeShowDay: function(date){
-              let string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-              //return [ array.indexOf(string) == -1 ]
-              return [true];
-            }
-          });
-        </script>
-      </div>
-      <div class="article-data-scraping article-section">
-        <div id="data-scraping-status">
-          <div class="label">
-            <span>Daten Sammeln</span>
-          </div>
-          <div class="value">
-            <span th:if="${data_scraping}">Aktiviert</span>
-            <span th:unless="${data_scraping}">Deaktiviert</span>
-          </div>
+        <div class="article-day-select article-section">
+            <div id="datepicker">
+
+            </div>
+            <script type="text/javascript">
+                var $datepicker = $('#datepicker');
+                var params = new URLSearchParams(location.search);
+                var initialDate=params.get('date')
+                console.log(initialDate)
+                if(initialDate==null)initialDate=new Date();
+
+                $datepicker.datepicker(
+                     {
+                    onSelect: function (dateText) {
+                        let date=new Date(dateText);
+                        let dateString=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+                        console.log("Selected date: " + dateString + "; input's current value: " + this.value);
+                        if(dateString===initialDate)return;
+                        params.set('date', dateString);
+                        window.location.search = params.toString();
+                    },
+                    beforeShowDay: function (date) {
+                        let string = jQuery.datepicker.formatDate('yyyy-MM-dd', date);
+                        //return [ array.indexOf(string) == -1 ]
+                        return [true];
+                    }
+                });
+                $datepicker.datepicker('setDate',new Date(initialDate));
+            </script>
         </div>
-      </div>
+        <div class="article-data-scraping article-section">
+            <div id="data-scraping-status">
+                <div class="label">
+                    <span>Daten Sammeln</span>
+                </div>
+                <div class="value">
+                    <span th:if="${data_scraping}">Aktiviert</span>
+                    <span th:unless="${data_scraping}">Deaktiviert</span>
+                </div>
+            </div>
+        </div>
     </article>
-  </main>
-  </body>
+</main>
+</body>
 </html>

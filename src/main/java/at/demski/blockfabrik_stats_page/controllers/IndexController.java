@@ -53,7 +53,7 @@ public class IndexController {
         //If the selected day is the current day, show predicted values, otherwise show averages
         if(BlockfabrikStatsPageApplication.tf_support&&DateManager.day()-1==day){
             int usedHour=hour==null? DateManager.hour():hour;
-            int usedMinute=hour==null? DateManager.minute():minute;
+            int usedMinute=minute==null? DateManager.minute():minute;
             model.addAttribute("data", modelHandler.getPrediction(dbConnector.getValuesForDay(DateManager.today(),usedHour,usedMinute),usedHour,usedMinute,20));
         }else{
             model.addAttribute("data", dbConnector.getHalfHourAveragesNew(day+1,20));

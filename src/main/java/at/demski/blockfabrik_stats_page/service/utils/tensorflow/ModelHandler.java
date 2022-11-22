@@ -35,7 +35,8 @@ public class ModelHandler {
 
     public ModelHandler(){
         if(!BlockfabrikStatsPageApplication.tf_support)return;
-        logger.info("Creating Model Handler\nTF Version: "+TensorFlow.version());
+        logger.info("Creating Model Handler");
+        logger.info("TF Version: "+TensorFlow.version());
         loadModel(DEFAULT_TYPE,DEFAULT_NAME,DEFAULT_VERSION);
     }
 
@@ -43,7 +44,7 @@ public class ModelHandler {
         try {
             Resource resource = new ClassPathResource("tf-models"+ File.separator+type+File.separator+name+File.separator+version+File.separator);
             model=SavedModelBundle.load(resource.getFile().getPath(), "serve");
-            logger.info("\nSuccessfully loaded model!");
+            logger.info("Successfully loaded model!");
         }
         catch (TensorFlowException | IOException ex) {
             ex.printStackTrace();

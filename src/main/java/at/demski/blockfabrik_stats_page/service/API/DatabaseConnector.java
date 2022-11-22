@@ -204,4 +204,8 @@ public class DatabaseConnector {
     public List<BlockfabrikDatapoint> getValuesForDay(Date date, int hour,int minute){
         return datapointRepository.getBeforeTime(date,hour,minute);
     }
+
+    public List<BlockfabrikDatapoint> getValuesForDay(Date date){
+        return datapointRepository.getAllByDate(date);
+    }
 }

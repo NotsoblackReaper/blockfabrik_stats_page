@@ -1,6 +1,9 @@
 :root{
     --background-color:#b8b6b0;
+    --calendar-background-color: #8c8982;
     --content-background-color:#1d1f21;
+    --content-selected-color: #2a2e2f;
+    --content-hover-color: #414548;
     --border-color: #292c2f;
 }
 

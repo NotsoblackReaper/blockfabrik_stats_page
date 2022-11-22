@@ -43,6 +43,7 @@ public class WeatherAPI {
             URL url = new URL("https://wetter.orf.at/wien/innerestadt/");
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
+            con.setRequestProperty("http.agent","Blockfabrik Statspage "+DateManager.hour()+":"+DateManager.minute());
 
             int status = con.getResponseCode();
 
@@ -78,6 +79,6 @@ public class WeatherAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new WeatherData(0,0,0,DateManager.today());
     }
 }
