@@ -54,7 +54,13 @@ public class IndexController {
         if(BlockfabrikStatsPageApplication.tf_support&&DateManager.day()-1==day){
             int usedHour=hour==null? DateManager.hour():hour;
             int usedMinute=minute==null? DateManager.minute():minute;
-            model.addAttribute("data", modelHandler.getPrediction(dbConnector.getValuesForDay(DateManager.today(),usedHour,usedMinute),usedHour,usedMinute,20));
+            var data=dbConnector.getValuesForDay(DateManager.today());
+            System.out.println(DateManager.today());
+            System.out.println(data.size());
+            var tmp=modelHandler.getPrediction(data,usedHour,usedMinute,20);
+            System.out.println(tmp.size());
+            model.addAttribute("data", tmp);
+
         }else{
             model.addAttribute("data", dbConnector.getHalfHourAveragesNew(day+1,20));
         }

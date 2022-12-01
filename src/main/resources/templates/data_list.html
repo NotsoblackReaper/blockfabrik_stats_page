@@ -11,7 +11,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <script src="https://d3js.org/d3.v4.js"></script>
+    <div th:replace="fragments/charts.html :: chart-base-gcharts()"></div>
 
     <th:block th:replace="fragments/general.html :: styles"></th:block>
 </head>
@@ -46,84 +46,7 @@
         <div id="chart-container" class="article-day-chart article-section">
             chart
             <div id="chart-div"></div>
-            <script th:inline="javascript" type="text/javascript">
-                var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
-                var dataArray = /*[[${datapoints}]]*/ ['error'];
-            </script>
-
-            <script th:inline="javascript" type="text/javascript">
-                // set the dimensions and margins of the graph
-                let container=document.getElementById("chart-container");
-                var margin = {top: 30, right: 30, bottom: 40, left: 50},
-                    width = container.offsetWidth - margin.left - margin.right,
-                    height = container.offsetHeight - margin.top - margin.bottom;
-
-                // append the svg object to the body of the page
-                var svg = d3.select("#chart-div")
-                    .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform",
-                        "translate(" + margin.left + "," + margin.top + ")");
-
-                // Parse the Data
-                function draw(data) {
-
-// X axis
-                    var x = d3.scaleBand()
-                        .range([0, width])
-                        .domain(data.map(function (d) {
-                            return d.hour+':'+d.minute;
-                        }))
-                        .padding(0);
-                    svg.append("g")
-                        .attr("transform", "translate(0," + height + ")")
-                        .call(d3.axisBottom(x))
-                        .selectAll("text")
-                        .attr("transform", "translate(-10,0)rotate(-45)")
-                        .style("text-anchor", "end");
-
-// Add Y axis
-                    let maxVal=Math.max.apply(Math, dataArray.map(function(o) { return o.value; }))
-                    if(maxVal<160)maxVal=160;
-
-                    var y = d3.scaleLinear()
-                        .domain([0, maxVal])
-                        .range([height, 0]);
-                    svg.append("g")
-                        .call(d3.axisLeft(y));
-
-// Bars
-                    svg.selectAll("mybar")
-                        .data(data)
-                        .enter()
-                        .append("rect")
-                        .attr("x", function (d) {
-                            return x(d.hour+':'+d.minute);
-                        })
-                        .attr("y", function (d) {
-                            return y(d.value);
-                        })
-                        .attr("width", x.bandwidth())
-                        .attr("height", function (d) {
-                            return height - y(d.value);
-                        })
-                        .attr("fill",function (d){
-                            if(d.value>119)
-                                return colors[3];
-                            else if(d.value>99)
-                                return colors[2];
-                            else if(d.value>39)
-                                return colors[1];
-                            else
-                                return colors[0];
-                        })
-                        //.attr("style","outline: thin solid black;")
-
-                };
-                draw(dataArray);
-            </script>
+            <div th:replace="fragments/charts.html :: bar-chart-gcharts(${datapoints},'datePicker','chart-div','datepickerChart','24:00')"></div>
         </div>
         <div class="article-day-select article-section">
             <div id="datepicker">

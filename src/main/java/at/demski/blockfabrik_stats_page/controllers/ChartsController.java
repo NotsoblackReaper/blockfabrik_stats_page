@@ -107,7 +107,7 @@ public class ChartsController {
         return "data_charts";
     }
 
-    @GetMapping("/data/charts/day/{dayNr}")
+    //@GetMapping("/data/charts/day/{dayNr}")
     public String dataChartForDay(Model model, @PathVariable("dayNr") int day) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());

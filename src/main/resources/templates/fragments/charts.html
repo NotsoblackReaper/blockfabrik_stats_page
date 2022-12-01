@@ -5,9 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<th:block th:fragment="chart-base()">
+<th:block th:fragment="chart-base-gcharts()">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+
         let start_draw=0;
         let duration = 0;
 
@@ -17,7 +18,59 @@
 
         var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
 
-        function refine_data(raw_data,current_time){
+        function process_data(raw_data,current_time){
+            const start = performance.now();
+
+            let style='stroke-color: black; stroke-width: 1;opacity: 1;';
+            let refined_data=[];
+            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
+            for(let i=0,array_index=1;i<raw_data.length;i++){
+                let time=String(raw_data[i].hour).padStart(2, '0')+':'+String(raw_data[i].minute).padStart(2, '0')
+                let value=raw_data[i].value;
+                let tmp_style=style;
+                if(current_time!=null){
+                    let curr_min=current_time%100;
+                    if(curr_min<30)curr_min=30;
+                    else curr_min=60;
+                    let curr_hrs=Math.floor(current_time/100);
+                    if(raw_data[i].hour>curr_hrs||(raw_data[i].hour===curr_hrs&&raw_data[i].minute>curr_min))
+                        tmp_style='stroke-color: black; stroke-width: 0;opacity: 0.5;';
+                }
+                tmp_style+='color: ';
+                if(value>119)
+                    tmp_style+=colors[3];
+                else if(value>99)
+                    tmp_style+=colors[2];
+                else if(value>39)
+                    tmp_style+=colors[1];
+                else
+                    tmp_style+=colors[0];
+
+                refined_data[i+1]=[time,value,tmp_style];
+            }
+            const duration = performance.now() - start;
+
+            console.log("Refine data duration: "+duration);
+
+            return refined_data;
+        }
+    </script>
+</th:block>
+
+<th:block th:fragment="chart-base-gcharts-legacy()">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        let start_draw=0;
+        let duration = 0;
+
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+
+        var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
+
+        function process_data(raw_data,current_time){
             const start = performance.now();
 
             var style='stroke-color: black; stroke-width: 1;opacity: 1;';
@@ -56,93 +109,104 @@
     </script>
 </th:block>
 
-<th:block th:fragment="chart-base-exp()">
+<th:block th:fragment="chart-base-d3()">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
     <script type="text/javascript">
-        let start_draw=0;
-        let duration = 0;
-
-        google.charts.load('current', {
-            'packages': ['corechart']
-        });
-
         var colors=['#44a40c','#0864e0','#d9980c','#c2330d']
 
-        function refine_data(raw_data,current_time){
-            console.log(raw_data);
-            const start = performance.now();
+        function draw(data, containerId, currentTime) {
+            let container=document.getElementById(divName)
+            let margin = {top: 10, right: 10, bottom: 10, left: 10,text:40},
+                width = container.offsetWidth - margin.left - margin.right-margin.text,
+                height = container.offsetHeight - margin.top - margin.bottom-margin.text;
 
-            var style='stroke-color: black; stroke-width: 1;opacity: 1;';
-            var refined_data=[];
-            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
-            for(var i=0,array_index=1;i<raw_data.length;i++){
-                var time=String(raw_data[i].hour).padStart(2, '0')+':'+String(raw_data[i].minute).padStart(2, '0')
-                let value=raw_data[i].value;
-                let tmp_style=style;
-                if(current_time!=null){
-                    let curr_min=current_time%100;
-                    if(curr_min<30)curr_min=30;
-                    else curr_min=60;
-                    let curr_hrs=Math.floor(current_time/100);
-                    if(raw_data[i].hour>curr_hrs||raw_data[i].hour===curr_hrs&&raw_data[i].minute>curr_min)
-                        tmp_style='stroke-color: black; stroke-width: 0;opacity: 0.5;';
-                }
-                tmp_style+='color: ';
-                if(value>119)
-                    tmp_style+=colors[3];
-                else if(value>99)
-                    tmp_style+=colors[2];
-                else if(value>39)
-                    tmp_style+=colors[1];
-                else
-                    tmp_style+=colors[0];
+            // append the svg object to the body of the page
+            let svg = d3.select("#"+containerId)
+                .append("svg")
+                .attr("width", width+margin.text)
+                .attr("height", height+margin.text)
+                .append("g")
+                .attr("transform",
+                    "translate(" + (margin.left+margin.text/2) + "," + margin.top + ")");
+// X axis
+            let x = d3.scaleBand()
+                .range([0, width])
+                .domain(data.map(function (d) {
+                    return d.hour+':'+d.minute;
+                }))
+                .padding(0);
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+                .selectAll("text")
+                .attr("transform", "translate(-10,0)rotate(-45)")
+                .style("text-anchor", "end");
 
-                refined_data[i+1]=[time,value,tmp_style];
-            }
-            const duration = performance.now() - start;
+// Add Y axis
+            let maxVal=Math.max.apply(Math, data.map(function(o) { return o.value; }))
+            if(maxVal<160)maxVal=160;
 
-            console.log("Refine data duration: "+duration);
+            let y = d3.scaleLinear()
+                .domain([0, maxVal])
+                .range([height, 0]);
+            svg.append("g")
+                .call(d3.axisLeft(y));
 
-            return refined_data;
-        }
+// Bars
+            svg.selectAll("mybar")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", function (d) {
+                    return x(d.hour+':'+d.minute);
+                })
+                .attr("y", function (d) {
+                    return y(d.value);
+                })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d) {
+                    return height - y(d.value);
+                })
+                .attr("fill",function (d){
+                    if(d.value>119)
+                        return colors[3];
+                    else if(d.value>99)
+                        return colors[2];
+                    else if(d.value>39)
+                        return colors[1];
+                    else
+                        return colors[0];
+                })
+                .style("fill-opacity", function(d) {
+                    if(currentTime!=null){
+                        let curr_min=currentTime%100;
+                        if(curr_min<30)curr_min=30;
+                        else curr_min=60;
+                        let curr_hrs=Math.floor(currentTime/100);
+                        if(d.hour>curr_hrs||d.hour===curr_hrs&&d.minute>curr_min)
+                            return 0.5;
+                    }
+                    return 1;
+                });
+            //.attr("style","outline: thin solid black;")
+        };
     </script>
 </th:block>
 
-<script th:fragment="small-bar-chart(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
-        function [(${methodName})](){
-            start_draw = performance.now();
+<script th:fragment="bar-chart-d3(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
                 /*<![CDATA[*/
                 var raw_data = /*[[${chartData}]]*/ ['error'];
                 var dayName = /*[[${dayName}]]*/ 'error';
                 var divName = /*[[${divName}]]*/ 'error';
                 var currentTime = /*[[${currentTime}]]*/ 'error';
                 /*]]>*/
-               if (raw_data.length > 0) {
-                    var refined_data = refine_data(raw_data,currentTime);
-                var data = google.visualization.arrayToDataTable(refined_data);
-                var options = {
-                    isStacked: false,
-                    title: 'Besucher ' + dayName,
-                    vAxis: {viewWindow:{min: 0,max: 160},gridlines:{count:5,interval:[2,4]}},
-                    hAxis: { },
-                    legend: {position: 'none'},
-                    backgroundColor: {fill: 'transparent',},
-                    bar: {groupWidth: "100%"},
-                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
-                };
+                draw(raw_data,divName);
+</script>
 
-                var chart = new google.visualization.ColumnChart(document.getElementById(divName));
-                chart.draw(data, options);
-                   duration = performance.now() - start_draw;
-                   console.log("Draw chart Duration: "+duration);
-            }
-        }
-
-        google.charts.setOnLoadCallback([(${methodName})]);
-
-    </script>
-
-<script th:fragment="large-bar-chart(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
+<script th:fragment="small-bar-chart-gcharts(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
     function [(${methodName})](){
         start_draw = performance.now();
         /*<![CDATA[*/
@@ -152,7 +216,40 @@
         var currentTime = /*[[${currentTime}]]*/ 'error';
         /*]]>*/
         if (raw_data.length > 0) {
-            var refined_data = refine_data(raw_data,currentTime);
+            var refined_data = process_data(raw_data,currentTime);
+            var data = google.visualization.arrayToDataTable(refined_data);
+            var options = {
+                isStacked: false,
+                title: 'Besucher ' + dayName,
+                vAxis: {viewWindow:{min: 0,max: 160},gridlines:{count:5,interval:[2,4]}},
+                hAxis: { },
+                legend: {position: 'none'},
+                backgroundColor: {fill: 'transparent',},
+                bar: {groupWidth: "100%"},
+                chartArea: {width: '80%',height: '60%',backgroundColor: {},}
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById(divName));
+            chart.draw(data, options);
+            duration = performance.now() - start_draw;
+            console.log("Draw chart Duration: "+duration);
+        }
+    }
+    google.charts.setOnLoadCallback([(${methodName})]);
+</script>
+
+<script th:fragment="bar-chart-gcharts(chartData,dayName,divName,methodName,currentTime)" th:inline="javascript" type="text/javascript">
+    function [(${methodName})](){
+        start_draw = performance.now();
+        /*<![CDATA[*/
+        var raw_data = /*[[${chartData}]]*/ ['error'];
+        var dayName = /*[[${dayName}]]*/ 'error';
+        var divName = /*[[${divName}]]*/ 'error';
+        var currentTime = /*[[${currentTime}]]*/ 'error';
+        /*]]>*/
+        if (raw_data.length > 0) {
+            var refined_data = process_data(raw_data,currentTime);
+            console.log(refined_data);
             var data = google.visualization.arrayToDataTable(refined_data);
             var options = {
                 isStacked: false,

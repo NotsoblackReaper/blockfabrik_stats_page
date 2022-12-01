@@ -11,87 +11,9 @@
     <th:block th:replace="fragments/general.html :: styles"></th:block>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
 
-        google.charts.load('current', {'packages':['corechart']});
-
-        var colors=['#7fbd5b','#5281c0','#b2924c','#9d4c36']
-
-        function refine_data(raw_data,current_time){
-            const start = performance.now();
-
-            var style='stroke-color: black; stroke-width: 1;opacity: 1;';
-            var refined_data=[];
-            refined_data[0]=['Zeit','Besucher',{ role: 'style' }];
-            for(var i=0,array_index=1;i<raw_data.length;i++){
-                var time=
-                    String(raw_data[i].datapoint_hour).padStart(2, '0')
-                    +':'+
-                    String(raw_data[i].datapoint_minute).padStart(2, '0');
-                let value=raw_data[i].datapoint_act;
-                let tmp_style=style;
-                if(current_time!=null){
-                    let curr_min=current_time%100;
-                    if(curr_min<30)curr_min=30;
-                    else curr_min=60;
-                    let curr_hrs=Math.floor(current_time/100);
-                    if(raw_data[i].datapoint_hour>curr_hrs||raw_data[i].datapoint_minute>curr_min)
-                        tmp_style='stroke-color: black; stroke-width: 0;opacity: 0.5;';
-                }
-                tmp_style+='color: ';
-                if(value>119)
-                    tmp_style+=colors[3];
-                else if(value>99)
-                    tmp_style+=colors[2];
-                else if(value>39)
-                    tmp_style+=colors[1];
-                else
-                    tmp_style+=colors[0];
-
-                refined_data[i+1]=[time,value,tmp_style];
-            }
-            const duration = performance.now() - start;
-
-            console.log("Refine data duration: "+duration);
-
-            return refined_data;
-        }
-    </script>
-    <script th:inline="javascript" type="text/javascript">
-        let start_draw=0;
-        let duration = 0;
-
-        function drawChart() {
-            start_draw = performance.now();
-            /*<![CDATA[*/
-            var raw_data = /*[[${data}]]*/ ['error'];
-            var dayName = /*[[${dayName}]]*/ 'error';
-            var currentTime = /*[[${currentTime}]]*/ 'error';
-            /*]]>*/
-            var divName = 'indexChart';
-            if (raw_data.length > 0) {
-                var refined_data = refine_data(raw_data,currentTime);
-                var data = google.visualization.arrayToDataTable(refined_data);
-                var options = {
-                    isStacked: false,
-                    title: 'Besucher ' + dayName,
-                    vAxis: {viewWindow:{min: 0,max: 180},gridlines:{count:5,interval:[2,4]}},
-                    hAxis: { },
-                    legend: {position: 'none'},
-                    backgroundColor: {fill: 'transparent',},
-                    bar: {groupWidth: "100%"},
-                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
-                };
-
-                var chart = new google.visualization.ColumnChart(document.getElementById(divName));
-                chart.draw(data, options);
-                duration = performance.now() - start_draw;
-                console.log("Draw chart Duration: "+duration);
-            }
-        }
-
-        google.charts.setOnLoadCallback(drawChart);
-    </script>
+    <div th:replace="fragments/charts.html :: chart-base-gcharts-legacy()"></div>
+    <div th:replace="fragments/charts.html :: bar-chart-gcharts(${data},${dayName},${'indexChart'},${'indexChart'},${currentTime})"></div>
 </head>
 <body>
 

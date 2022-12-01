@@ -8,43 +8,9 @@
     <link rel="stylesheet" th:href="@{/styles/widescreen/indexWide.css}" media="screen and (min-width: 1101px)"/>
     <link rel="stylesheet" th:href="@{/styles/slim/indexSlim.css}" media="screen and (max-width: 1100px)"/>
 
+    <div th:replace="fragments/charts.html :: chart-base-gcharts()"></div>
+
     <th:block th:replace="fragments/general.html :: styles"></th:block>
-
-
-    <div th:replace="fragments/charts.html :: chart-base-exp()"></div>
-
-    <script th:inline="javascript" type="text/javascript">
-        function drawChart() {
-            start_draw = performance.now();
-            /*<![CDATA[*/
-            var raw_data = /*[[${data}]]*/ ['error'];
-            var dayName = /*[[${dayName}]]*/ 'error';
-            var currentTime = /*[[${currentTime}]]*/ 'error';
-            /*]]>*/
-            var divName = 'indexChart';
-            if (raw_data.length > 0) {
-                var refined_data = refine_data(raw_data,currentTime);
-                var data = google.visualization.arrayToDataTable(refined_data);
-                var options = {
-                    isStacked: false,
-                    title: 'Besucher ' + dayName,
-                    vAxis: {viewWindow:{min: 0,max: 180},gridlines:{count:5,interval:[2,4]}},
-                    hAxis: { },
-                    legend: {position: 'none'},
-                    backgroundColor: {fill: 'transparent',},
-                    bar: {groupWidth: "100%"},
-                    chartArea: {width: '85%',height: '80%',backgroundColor: {},}
-                };
-
-                var chart = new google.visualization.ColumnChart(document.getElementById(divName));
-                chart.draw(data, options);
-                duration = performance.now() - start_draw;
-                console.log("Draw chart Duration: "+duration);
-            }
-        }
-
-        google.charts.setOnLoadCallback(drawChart);
-    </script>
 </head>
 <body>
 
@@ -54,6 +20,8 @@
     <article>
         <div class="article-chart article-section">
             <div id="indexChart" class=""></div>
+            <div th:replace="fragments/charts.html :: bar-chart-gcharts(${data},'','indexChart','indexChart',${currentTime})"></div>
+
         </div>
         <div class="article-status article-section"
              th:style="'background-image: url(' + @{/imgs/fahrraeder.jpg} + ');background-size:cover;'">
