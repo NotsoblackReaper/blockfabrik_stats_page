@@ -132,6 +132,8 @@ public class DatabaseConnector {
     }
 
     public List<Datapoint> getHalfHourAverages(int day){
+        return repository.getAverageForDay(day,30);
+        /*
         List<Datapoint> rawlist;
         List<Datapoint> medianList = new ArrayList<>();
 
@@ -161,6 +163,7 @@ public class DatabaseConnector {
         }
 
         return points;
+        */
     }
 
     public List<BlockfabrikDatapoint> getHalfHourAveragesNew(int day,int averageLength){
@@ -194,7 +197,7 @@ public class DatabaseConnector {
             fiveMinAvg.add(dummyDatapoint);
         }
 
-        return DatapointUtils.averageDayValues(fiveMinAvg,20);
+        return DatapointUtils.averageDayValues(fiveMinAvg,averageLength);
     }
 
     public List<DayData> getAllDayData(){

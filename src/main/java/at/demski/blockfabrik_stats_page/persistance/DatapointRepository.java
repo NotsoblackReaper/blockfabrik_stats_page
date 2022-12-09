@@ -1,5 +1,6 @@
 package at.demski.blockfabrik_stats_page.persistance;
 
+import at.demski.blockfabrik_stats_page.entities.BlockfabrikDatapoint;
 import at.demski.blockfabrik_stats_page.entities.Datapoint;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -17,4 +18,10 @@ public interface DatapointRepository extends CrudRepository<Datapoint,Integer> {
 
     @Query(value="select * from datapoint where datapoint_day=?1 order by datapoint_hour asc, datapoint_minute asc",nativeQuery = true)
     List<Datapoint> findAllForDay(int day);
+
+    @Query(value="SELECT datapoint_id,ROUND(AVG(datapoint_act)) as datapoint_act,datapoint_max,datapoint_date,datapoint_day,datapoint_hour,datapoint_minute,id " +
+            "FROM datapoint where datapoint_day=?1 " +
+            "GROUP BY datapoint_day, datapoint_hour, FLOOR(datapoint_minute / ?2) " +
+            "order by datapoint_hour asc, datapoint_minute asc",nativeQuery = true)
+    List<Datapoint> getAverageForDay(int day, int averageLength);
 }

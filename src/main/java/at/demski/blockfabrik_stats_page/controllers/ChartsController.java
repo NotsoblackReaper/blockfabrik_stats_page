@@ -41,64 +41,22 @@ public class ChartsController {
 
     @GetMapping("/data/charts")
     public String dataCharts(Model model) {
-
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
         int currentTime = 2400;
 
-
+        List<List<Datapoint>> halfHourAverageList=new ArrayList<>();
         String[][] days = new String[7][4];
-
-        List<List<Datapoint>> rawlist = new ArrayList<>();
-        List<List<Datapoint>> medianList = new ArrayList<>();
-        List<List<Datapoint>> halfHourAverageList = new ArrayList<>();
-
-        rawlist.add(dbConnector.getAllForDay(currentDay));
         days[0] = getDayData(currentDay, day_names);
-
-        medianList.add(new ArrayList<>());
-        for (int j = 7 * 60 + 30; j < 22 * 60; j += 2) {
-            int finalJ = j;
-            float median = getMedian(rawlist.get(rawlist.size() - 1), j);
-            medianList.get(0).add(new Datapoint(Math.round(median), j / 60, j % 60, currentDay));
-        }
+        halfHourAverageList.add(dbConnector.getHalfHourAverages(currentDay));
 
         for (int i = 1, day = 1; i <= 7; ++i) {
             if (i == currentDay)
                 continue;
-            rawlist.add(dbConnector.getAllForDay(i));
+            halfHourAverageList.add(dbConnector.getHalfHourAverages(day));
             days[day] = getDayData(i, day_names);
-
-            medianList.add(new ArrayList<>());
-            for (int j = 7 * 60 + 30; j < 22 * 60; j += 2) {
-                int finalJ = j;
-                float median = getMedian(rawlist.get(rawlist.size() - 1), j);
-                medianList.get(day).add(new Datapoint(Math.round(median), j / 60, j % 60, i));
-            }
             day++;
-        }
-
-        for (int i = 0, day = 1; i < 7; ++i) {
-            List<Datapoint> points = new ArrayList<>();
-            float sum = 0;
-            int n = 0;
-            for (int j = 0; j < medianList.get(i).size(); ++j) {
-                Datapoint p = medianList.get(i).get(j);
-                sum += p.getDatapoint_act();
-                ++n;
-                if (p.getDatapoint_minute() == 28 || p.getDatapoint_minute() == 58) {
-                    points.add(new Datapoint(
-                            Math.round(sum / n),
-                            p.getDatapoint_hour() - (p.getDatapoint_minute() == 28 ? 1 : 0),
-                            p.getDatapoint_minute() == 28 ? 0 : 30,
-                            p.getDatapoint_day()));
-                    sum = 0;
-                    n = 0;
-                }
-            }
-
-            halfHourAverageList.add(points);
         }
 
         model.addAttribute("data", halfHourAverageList.toArray());
