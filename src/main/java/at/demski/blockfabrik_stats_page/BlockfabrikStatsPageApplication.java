@@ -30,7 +30,7 @@ public class BlockfabrikStatsPageApplication {
             web_server = Boolean.parseBoolean(webSv_str);
 
         logger.info("\n---------------------------------------------\n"+
-                "BlockfabrikStatsPageApplication version 0.2\n"+
+                "BlockfabrikStatsPageApplication version 0.2.1\n"+
                 "Starting with Configuration:\n"+
                 "Data Scraping: "+data_scraping+(scrape_str==null?"(default)\n":"\n")+
                 "Web Server:    "+web_server+(webSv_str==null?"(default)\n":"\n")+
